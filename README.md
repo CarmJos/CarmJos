@@ -1,10 +1,12 @@
 ## 你好！我是 **Carm** 。
 <img align="right" src="https://github-readme-stats.vercel.app/api?username=CarmJos&show_icons=true&hide_title=true" />
 Java全栈工程师，曾任教师,现居天津。
-
-目前在任 **YourCraft(你的世界)Java版** 服务器项目总管。
-
 ![](https://visitor-badge.glitch.me/badge?page_id=carmjos.readme)
+
+### 我的历史
+- **YourCraft(你的世界)Java版** 服务器项目总管 _现任_
+- **Kar Netowrk** 创始人、负责人
+
 ### 相关账号
 - BiliBili [卡姆姬](https://space.bilibili.com/14172948)
 - 新浪微博 [卡姆酱](https://weibo.com/2631818190)
