@@ -17,7 +17,7 @@ Java全栈工程师，曾任教师，现居天津。
 - 💎 MineCraft服务器插件、运维、策划与管理(从业七年)
 
 ### 联系我
-- BiliBili [@卡姆姬](https://space.bilibili.com/14172948)
+- 哔哩哔哩 [@卡姆姬](https://space.bilibili.com/14172948)
 - 新浪微博 [@卡姆酱](https://weibo.com/2631818190)
 - 📧 商务相关请发往邮箱 **carm@carm.cc** 。
 - 💬 如果有任何建议或问题，都可以[在这里](https://github.com/CarmJos/CarmJos/issues)告诉我，我会在能力范围之内回复您。
