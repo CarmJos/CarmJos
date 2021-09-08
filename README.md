@@ -9,6 +9,8 @@ Java全栈工程师，曾任教师，现居天津。
 - **Kar Netowrk** 创始人、负责人
 
 ### 相关领域
+<img align="right" height=50% width=50% src="https://s3.bmp.ovh/imgs/2021/09/0746e92438d32f4d.png" />
+
 - ⌨️ Java后端开发
 - 🎥 用户界面设计
 - 📐 3D部件建模与打印
