@@ -14,7 +14,7 @@ Java全栈工程师，曾任教师，现居天津。
 - ⌨️ Java后端开发
 - 🎥 用户界面设计
 - 📐 3D部件建模与打印
-- 💿 Mysql、MongoDB数据架构设计
+- 💿 MySQL、MongoDB数据架构设计
 - 💻 Linux系统运维
 - 💎 MineCraft服务器插件、运维、策划与管理(从业七年)
 
