@@ -5,7 +5,7 @@ Java全栈工程师，曾任教师，现居天津。
 ![](https://visitor-badge.glitch.me/badge?page_id=carmjos.readme)
 
 ### 我的经历
-- [x] **你的世界Java版服务器** 项目总管
+- [ ] **你的世界Java版服务器** 项目总管
 - [x] **Kar Netowrk** 创始人、负责人
 - [x] **KarStudio** 创始人、领导人 
 
@@ -16,7 +16,7 @@ Java全栈工程师，曾任教师，现居天津。
 - 🎥 用户界面设计
 - 📐 3D部件建模与打印
 - 💿 MySQL、MongoDB数据架构设计
-- 💻 Linux系统运维
+- 💻 Linux/Windows系统运维
 - 💎 MineCraft服务器插件、运维、策划与管理(从业七年)
 
 ### 联系我
