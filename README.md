@@ -12,9 +12,9 @@ Java全栈工程师，曾任教师，现居天津。
 ### 相关领域
 <img align="right" height=50% width=50% src="https://s3.bmp.ovh/imgs/2021/09/0746e92438d32f4d.png" />
 
-- ⌨️ Java后端开发
 - 🎥 用户界面设计
-- 📐 3D部件建模与打印
+- 📐 3D零件建模与打印
+- ⌨️ Java后端开发与架构设计
 - 💿 MySQL、MongoDB数据架构设计
 - 💻 Linux/Windows系统运维
 - 💎 MineCraft服务器插件、运维、策划与管理(从业七年)
