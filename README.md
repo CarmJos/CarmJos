@@ -17,7 +17,7 @@ Java全栈工程师，曾任教师，现居天津。
 - ⌨️ Java后端开发与架构设计
 - 💿 MySQL、MongoDB数据架构设计
 - 💻 Linux/Windows系统运维
-- 💎 MineCraft服务器插件、运维、策划与管理(从业七年)
+- 💎 MineCraft服务器开发、运维、策划与管理(从业七年)
 
 ### 联系我
 - 哔哩哔哩 [@卡姆姬](https://space.bilibili.com/14172948)
