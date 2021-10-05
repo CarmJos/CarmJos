@@ -10,7 +10,7 @@ Java全栈工程师，曾任教师，现居南京。
 - [x] **KarStudio** 创始人、领导人 
 
 ### 相关领域
-<img align="right" height=45% width=45% src="https://raw.githubusercontent.com/CarmJos/CarmJos/main/img/rd-2.png" />
+<img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
 
 - 🎥 用户界面设计
 - 📐 3D零件建模与打印
