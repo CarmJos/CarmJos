@@ -1,5 +1,5 @@
 ## 你好！我是 **Carm** 。
-<img align="right" src="https://github-readme-stats.vercel.app/api?username=CarmJos&show_icons=true&locale=cn&hide_title=true&theme=buefy" />
+<img align="right" src="https://github-readme-stats.vercel.app/api?username=CarmJos&show_icons=true&locale=cn&hide_title=true" />
 Java全栈工程师，现居南京。
 
 欢迎访问我的文章站 [Carm's Pages](https://pages.carm.cc) ,不定期更新。
