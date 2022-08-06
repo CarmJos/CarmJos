@@ -10,13 +10,12 @@ Java全栈工程师，现居南京。
 
 - 🎥 用户界面设计
 - 📐 3D零件建模与打印
-- ⌨️ Java后端开发与架构设计
+- ⌨️ Java后端开发与架构设计<img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
 - 💿 MySQL、MongoDB数据架构设计
 - 💻 Linux/Windows系统运维
 - 💎 MineCraft服务器开发、运维、策划与管理(从业七年)
 
-### 联系我
-<img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
+### 联系方式
 - 哔哩哔哩 [@卡姆姬](https://space.bilibili.com/14172948)
 - 新浪微博 [@卡姆酱](https://weibo.com/2631818190)
 - 📧 商务相关请发往邮箱 **carm@carm.cc** 。
