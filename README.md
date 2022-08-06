@@ -6,11 +6,6 @@ Java全栈工程师，现居南京。
 
 ![](https://visitor-badge.glitch.me/badge?page_id=carmjos.readme)
 
-### 我的经历
-- [X] **你的世界Java版服务器** 项目总管
-- [x] **Kar Netowrk** 创始人、负责人
-- [x] **KarStudio** 创始人、领导人 
-
 ### 相关领域
 <img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
 
