@@ -1,18 +1,17 @@
 ## 你好！我是 **Carm** 。
-<img align="right" src="https://github-readme-stats.vercel.app/api?username=CarmJos&show_icons=true&locale=cn&include_all_commits=true&count_private=true&shide_title=false" />
+<img align="right" src="https://github-readme-stats.vercel.app/api?username=CarmJos&show_icons=true&locale=cn&count_private=true&disable_animations=true&shide_title=false&icon_color=8b658b&ring_color=8b658b&theme=dark" />
+
 Java全栈工程师，现居南京。
 
 欢迎访问我的文章站 [Carm's Pages](https://pages.carm.cc) ,不定期更新。
-
-![](https://visitor-badge.glitch.me/badge?page_id=carmjos.readme)
 
 ### 相关领域
 
 - 🎥 用户界面设计
 - 📐 3D零件建模与打印
-- ⌨️ Java后端开发与架构设计<img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
+- ⌨️ Java后端开发与架构设计
 - 💿 MySQL、MongoDB数据架构设计
-- 💻 Linux/Windows系统运维
+- 💻 Linux/Windows系统运维<img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
 - 💎 MineCraft服务器开发、运维、策划与管理(从业七年)
 
 ### 联系方式
