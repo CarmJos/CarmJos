@@ -12,7 +12,7 @@ Java全栈工程师，现居南京。
 - ⌨️ Java后端开发与架构设计
 - 💿 MySQL、MongoDB数据架构设计
 - 💻 Linux/Windows系统运维<img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
-- 💎 MineCraft服务器开发、运维、策划与管理(从业七年)
+- 💎 MineCraft服务器开发、运维、策划与管理
 
 ### 联系方式
 - 哔哩哔哩 [@卡姆姬](https://space.bilibili.com/14172948)
