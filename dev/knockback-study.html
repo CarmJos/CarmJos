@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="“脚本小子”对MC击退的研究成果 该页面研究的是原版击退算法以及原版击退算法中的各值的作用。 通常我们在调整击退参数的时候，都是靠感觉去调的。Kar团队另辟蹊径，通过数据和代码的方式去理解和调整最合适的击退。为了贯彻我们决心做中国PVP服领头羊的理念，我们决定将我们的研究成果分享出去。 对于代码的分析 EntityLiving类 由于在nms中部分变量经过了混淆，所以只能通过猜测得出这些变量的意义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对我的世界中PVP击退的研究报告">
+<meta property="og:url" content="https://pages.carm.cc/dev/knockback-study.html">
+<meta property="og:site_name" content="Carm&#39;s Pages">
+<meta property="og:description" content="“脚本小子”对MC击退的研究成果 该页面研究的是原版击退算法以及原版击退算法中的各值的作用。 通常我们在调整击退参数的时候，都是靠感觉去调的。Kar团队另辟蹊径，通过数据和代码的方式去理解和调整最合适的击退。为了贯彻我们决心做中国PVP服领头羊的理念，我们决定将我们的研究成果分享出去。 对于代码的分析 EntityLiving类 由于在nms中部分变量经过了混淆，所以只能通过猜测得出这些变量的意义">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/04/01/x1kWf4S3RtUjnwr.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/03/7HlA3oyzxvtjqZY.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/03/Zd38TsJWUOSmwjo.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/01/LnA7QfboVySBEX5.png">
+<meta property="og:image" content="http://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cint_%7B-n%7D%5E%7Bn%7Df%28x%29dx%7D%7B%5Cint_%7B-1%7D%5E%7B1%7Df%28x%29dx%7D=2x-x%5E2">
+<meta property="og:image" content="https://i.loli.net/2020/04/01/rSVGJyPlBKc6HDW.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/01/N62jPpTG3iVSaeQ.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/01/kxVR9mA1EsTNfOG.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/31/haRx8BJzAtIs4qO.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/31/lyx4WL1jcGS7OQC.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/01/9cmCE7o3ny5vIlU.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/01/rSVGJyPlBKc6HDW.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/01/kxVR9mA1EsTNfOG.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/03/l9fwgMSd5ATVFD7.png">
+<meta property="article:published_time" content="2020-04-03T11:30:00.000Z">
+<meta property="article:modified_time" content="2023-12-28T11:36:35.392Z">
+<meta property="article:author" content="CarmJos">
+<meta property="article:tag" content="kar">
+<meta property="article:tag" content="MineCraft游戏开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/04/01/x1kWf4S3RtUjnwr.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>对我的世界中PVP击退的研究报告</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="Carm&#39;s Pages" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/letter/kar-closed.html"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/dev/knockback-study.html"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/dev/knockback-study.html&text=对我的世界中PVP击退的研究报告"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/dev/knockback-study.html&is_video=false&description=对我的世界中PVP击退的研究报告"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=对我的世界中PVP击退的研究报告&body=Check out this article: https://pages.carm.cc/dev/knockback-study.html"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/dev/knockback-study.html&name=对我的世界中PVP击退的研究报告&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/dev/knockback-study.html&t=对我的世界中PVP击退的研究报告"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">“脚本小子”对MC击退的研究成果</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E4%BB%A3%E7%A0%81%E7%9A%84%E5%88%86%E6%9E%90"><span class="toc-number">1.1.</span> <span class="toc-text">对于代码的分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EntityLiving%E7%B1%BB"><span class="toc-number">1.1.1.</span> <span class="toc-text">EntityLiving类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EntityHuman%E7%B1%BB"><span class="toc-number">1.1.2.</span> <span class="toc-text">EntityHuman类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8C%9C%E6%B5%8B%E4%B8%8E%E5%AE%9E%E9%AA%8C"><span class="toc-number">1.2.</span> <span class="toc-text">猜测与实验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%84%E5%8F%82%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">各参数的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Friction"><span class="toc-number">1.3.1.</span> <span class="toc-text">Friction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Horizontal"><span class="toc-number">1.3.2.</span> <span class="toc-text">Horizontal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vertical"><span class="toc-number">1.3.3.</span> <span class="toc-text">Vertical</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SprintHorizontalBoost-SHB"><span class="toc-number">1.3.4.</span> <span class="toc-text">SprintHorizontalBoost, SHB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SprintVerticalBoost-SVB"><span class="toc-number">1.3.5.</span> <span class="toc-text">SprintVerticalBoost, SVB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VerticalLimit"><span class="toc-number">1.3.6.</span> <span class="toc-text">VerticalLimit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E5%8E%9F%E7%89%88%E5%87%BB%E9%80%80%E7%AE%97%E6%B3%95%E7%9A%84%E7%90%86%E8%A7%A3-%E7%A1%AC%E6%A0%B8%E6%85%8E%E5%85%A5"><span class="toc-number">1.4.</span> <span class="toc-text">对原版击退算法的理解(硬核慎入)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%8A%84%E8%A2%AD%E7%8C%9C%E6%B5%8B%E6%9F%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%87%BB%E9%80%80"><span class="toc-number">1.5.</span> <span class="toc-text">如何抄袭猜测某服务器的击退</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E5%8C%BA%E5%88%AB"><span class="toc-number">1.5.1.</span> <span class="toc-text">算法区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2%E8%87%AA%E5%B7%B1%E6%9C%8D%E7%9A%84kb%E8%A2%AB%E7%9B%97"><span class="toc-number">1.5.2.</span> <span class="toc-text">如何防止自己服的kb被盗</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E6%96%87%E6%A1%A3"><span class="toc-number">1.6.</span> <span class="toc-text">关于本文档</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        对我的世界中PVP击退的研究报告
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">CarmJos</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-04-03T11:30:00.000Z" itemprop="datePublished">2020-04-03</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/dev/">开发经验分享</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/MineCraft/" rel="tag">MineCraft游戏开发</a>, <a class="tag-link-link" href="/tags/kar/" rel="tag">kar</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h1>“脚本小子”对MC击退的研究成果</h1>
+<p>该页面研究的是原版击退算法以及原版击退算法中的各值的作用。</p>
+<p>通常我们在调整击退参数的时候，都是靠感觉去调的。Kar团队另辟蹊径，通过数据和代码的方式去理解和调整最合适的击退。为了贯彻我们<strong>决心</strong>做中国PVP服领头羊的理念，我们决定将我们的研究成果分享出去。</p>
+<h2 id="对于代码的分析">对于代码的分析</h2>
+<h3 id="EntityLiving类">EntityLiving类</h3>
+<p>由于在nms中部分变量经过了混淆，所以只能通过猜测得出这些变量的意义。</p>
+<p>在EntityLiving类中，玩家受到伤害时会触发<code>damageEntity</code>函数。</p>
+<p><img src="https://i.loli.net/2020/04/01/x1kWf4S3RtUjnwr.png" alt="EntityLiving1.png"></p>
+<ul>
+<li>d0为<strong>攻击者</strong>位置的X值减去<strong>受害者</strong>位置的X值，即为从<strong>受害者</strong>到<strong>攻击者</strong>的向量的X值。</li>
+<li>d1初始值为<strong>攻击者</strong>位置的Z值减去<strong>受害者</strong>位置的X值，即为从<strong>受害者</strong>到<strong>攻击者</strong>的向量的Z值。</li>
+</ul>
+<p>我们把d0称为x，d1称为z，则</p>
+<ul>
+<li>若x²+z²&lt;0.0001，则将d1设为一个-1至1之间的随机值*(见下方)，再乘以0.01，同时将d0也进行一次这样的操作。</li>
+<li>若x²+z²还是&lt;0.0001，则再进行一次，直到不满足这个条件为止。</li>
+</ul>
+<p>推测，这可能是两个玩家坐标一样或极度相近的时候，为防止产生0变量，生成一个随机的击退。为验证这个猜测，您可以tp一名玩家，此时您的坐标和这名玩家是一模一样的(其实会产生一点点差别)。接着打他一下，发现击退有时候不在您面前的方向，甚至有时候击退到身后去了。</p>
+<p>*编个程统计一下这个随机数，进行100000000次(一亿次)模拟，发现其分布曲线是金字塔形。</p>
+<p><img src="https://i.loli.net/2020/04/03/7HlA3oyzxvtjqZY.png" alt="分布是折线.png"></p>
+<p>它看起来大概是这样：</p>
+<p><img src="https://i.loli.net/2020/04/03/Zd38TsJWUOSmwjo.png" alt="折线.png"></p>
+<p>设该折线的方程为 y = f(x), x∈(-1, 1)<br>
+很明显，该随机变量X落在(-x, x),x∈(0, 1)的几率为</p>
+<p><img src="https://i.loli.net/2020/04/01/LnA7QfboVySBEX5.png" alt="几率.png"></p>
+<p><img src="http://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cint_%7B-n%7D%5E%7Bn%7Df%28x%29dx%7D%7B%5Cint_%7B-1%7D%5E%7B1%7Df%28x%29dx%7D=2x-x%5E2" alt="几率Latex"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$\frac&#123;\int_&#123;-n&#125;^&#123;n&#125;f(x)dx&#125;&#123;\int_&#123;-1&#125;^&#123;1&#125;f(x)dx&#125;=2x-x^2$</span><br></pre></td></tr></table></figure>
+<p>函数a中</p>
+<p><img src="https://i.loli.net/2020/04/01/rSVGJyPlBKc6HDW.png" alt="EntityLiving2.png"></p>
+<p>其中的d0和d1即为上方所提的x和z<br>
+设一个变量f1为</p>
+<p><img src="https://i.loli.net/2020/04/01/N62jPpTG3iVSaeQ.png" alt="EntityLiving3.png"></p>
+<p>即为该向量在水平面上投影的距离</p>
+<ol>
+<li>变量f2为0.4，我们把该值称为水平倍数，或者<code>Horizontal</code></li>
+<li>将<code>motX</code>、<code>motY</code>、<code>motZ</code>分别除以2，我们把该值称为<code>Friction</code></li>
+<li>接着将<code>motX</code> 减去 <code>x / f1 \* f2</code></li>
+<li>将<code>motY</code> 加上 <code>f2</code></li>
+<li>将<code>motZ</code> 减去 <code>z / f1 \* f2</code></li>
+<li>如果<code>motY</code>大于0.4，则设为0.4(这就是原版击退100附魔也无法飞天只能击远的原因)。我们把该值称为<code>VerticalLimit</code>。</li>
+</ol>
+<p>以上即为当受害者受到伤害时的原始击退算法。详细讲解请看下方<strong>对原版击退算法的理解</strong>。</p>
+<h3 id="EntityHuman类">EntityHuman类</h3>
+<p>接着在<strong>攻击者</strong>的算法中，再次对产生的击退做出修正。</p>
+<p>在EntityHuman类中,<strong>攻击者</strong>攻击别人时，<strong>受害者</strong>会受到以下击退</p>
+<p><img src="https://i.loli.net/2020/04/01/kxVR9mA1EsTNfOG.png" alt="EntityHuman1.png"></p>
+<p>其中，<code>i</code>为<strong>攻击者</strong>手上武器击退附魔的等级，若没有，则为0。<br>
+如果<strong>攻击者</strong>正在疾跑，则<code>i</code>再加1。<br>
+但是，在著名服务端mSpigot上，无论<strong>攻击者</strong>是否在疾跑，i的默认值都为1。</p>
+<p>yaw是<strong>攻击者</strong>的朝向的yaw值<s>(欧拉角警告)</s>，是角度制，所以后面的乘以π除以180是转为弧度制。<br>
+<code>entity.g(double motX, double motY, double motZ)</code>函数为</p>
+<p><img src="https://i.loli.net/2020/03/31/haRx8BJzAtIs4qO.png" alt="Entity1.png"></p>
+<p>意思为，该实体目前的速度向量加上这三个值，再把成员<code>ai</code>改为<code>true</code>。<br>
+回到上面的击退计算，其中MathHelper是一个优化的数学<s>工具人</s>工具类<br>
+于是，该操作可写为</p>
+<p><img src="https://i.loli.net/2020/03/31/lyx4WL1jcGS7OQC.png" alt="算法1.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$</span><br><span class="line">\begin&#123;cases&#125;</span><br><span class="line">motX=motX+\sin&#123;\frac&#123;yaw*\pi&#125;&#123;180°&#125;*0.5i&#125;\\</span><br><span class="line">motY=motY+0.1\\</span><br><span class="line">motZ=motZ+\sin&#123;\frac&#123;yaw*\pi&#125;&#123;180°&#125;*0.5i&#125;</span><br><span class="line">\end&#123;cases&#125;</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<p>完成这些操作后，<strong>攻击者</strong>的<code>motX</code>和<code>motZ</code>各自会乘以0.6。</p>
+<div class="admonition warning"><p>是<strong>攻击者</strong>的<code>motX</code>和<code>motZ</code>会乘以0.6！<strong>受害者</strong>的击退已经算完了，不会乘以0.6缩短！</p>
+</div>
+<p>由于我们平时在竞技场模式中并不会使用带击退附魔的东西当主武器，所以我们不考虑击退附魔。因此，我们只考虑<code>i</code>为0或1的情况。详细讲解请看下方<strong>对原版击退算法的理解</strong><br>
+我们把上面的0.5i的0.5称为疾跑水平加成(<code>SprintHorizontalBoost[SHB]</code>)，motY加的0.1称为疾跑竖直加成(<code>SprintVerticalBoost[SVB]</code>)</p>
+<h2 id="猜测与实验">猜测与实验</h2>
+<p>玩家的击退对于<strong>攻击者</strong>的朝向只跟<strong>攻击者</strong>的yaw值有关，也就是环顾四周时的方向、水平方向有关，和pitch，也就是上下朝向无关。无论<strong>攻击者</strong>从上往下还是从下往上攻击，击退的原始数值只跟<strong>攻击者</strong>的yaw值和<strong>攻击者</strong>与<strong>受害者</strong>在水平面上的投影的向量有关，接着才根据玩家是否疾跑、武器有无击退、是否对该数值进行进一步计算。<br>
+<strong>但是</strong>，如果<strong>攻击者</strong>既不在疾跑手上又没有击退附魔，则击退和yaw也无关。</p>
+<p>为了证明这一点，在采用原版击退的情况下，我做了个实验。</p>
+<p>先将敌人的坐标和自己的坐标精确控制在整数，以便计算。在所有条件都不变的情况下，攻击<strong>受害者</strong>，计算击退的大小。</p>
+<p><img src="https://i.loli.net/2020/04/01/9cmCE7o3ny5vIlU.png" alt="实验1.png"></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">第一次</th>
+<th style="text-align:center">第二次</th>
+<th style="text-align:center">第三次</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">击退前x值坐标</td>
+<td style="text-align:center">-34</td>
+<td style="text-align:center">-34</td>
+<td style="text-align:center">-34</td>
+</tr>
+<tr>
+<td style="text-align:center">击退后x值坐标</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+</tr>
+</tbody>
+</table>
+<p>重复3次实验发现，只要条件不变，每次击退都是一样的。</p>
+<p>接下来，只改变<strong>攻击者</strong>的<strong>pitch值</strong>，其他条件不变。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">pitch-&gt;</th>
+<th style="text-align:center">-10</th>
+<th style="text-align:center">0</th>
+<th style="text-align:center">10</th>
+<th style="text-align:center">20</th>
+<th style="text-align:center">30</th>
+<th style="text-align:center">40</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">击退前x值坐标</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+</tr>
+<tr>
+<td style="text-align:center">击退后x值坐标</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+</tr>
+</tbody>
+</table>
+<p>使用不同的值重复多次实验，发现击退还是一样的。</p>
+<p>那么我们只改变<strong>攻击者</strong>的<strong>yaw值</strong>，其他条件不变。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">yaw-&gt;</th>
+<th style="text-align:center">-100</th>
+<th style="text-align:center">-95</th>
+<th style="text-align:center">-90</th>
+<th style="text-align:center">-85</th>
+<th style="text-align:center">-80</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">击退前x值坐标</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+</tr>
+<tr>
+<td style="text-align:center">击退后x值坐标</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+<td style="text-align:center">-33.198</td>
+</tr>
+</tbody>
+</table>
+<p>神奇的是，yaw值改变后，击退依然不变。</p>
+<p>接着，我们给<strong>攻击者</strong>手上的剑加上击退属性，再进行测试。<br>
+同样只改变<strong>攻击者</strong>的<strong>pitch值</strong>，发现确实跟<strong>攻击者</strong>的<strong>pitch值无关</strong>。</p>
+<p>只改变<strong>攻击者</strong>的<strong>yaw值</strong>，得出以下结果：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">yaw-&gt;</th>
+<th style="text-align:center">-100</th>
+<th style="text-align:center">-95</th>
+<th style="text-align:center">-90</th>
+<th style="text-align:center">-85</th>
+<th style="text-align:center">-80</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">击退前x值坐标</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+<td style="text-align:center">-35</td>
+</tr>
+<tr>
+<td style="text-align:center">击退后x值坐标</td>
+<td style="text-align:center">-31.034</td>
+<td style="text-align:center">-31.009</td>
+<td style="text-align:center">-31.001</td>
+<td style="text-align:center">-31.009</td>
+<td style="text-align:center">-31.034</td>
+</tr>
+<tr>
+<td style="text-align:center">击退前z值坐标</td>
+<td style="text-align:center">-49</td>
+<td style="text-align:center">-49</td>
+<td style="text-align:center">-49</td>
+<td style="text-align:center">-49</td>
+<td style="text-align:center">-49</td>
+</tr>
+<tr>
+<td style="text-align:center">击退后z值坐标</td>
+<td style="text-align:center">-49.371</td>
+<td style="text-align:center">-49.182</td>
+<td style="text-align:center">-49</td>
+<td style="text-align:center">-48.818</td>
+<td style="text-align:center">-48.629</td>
+</tr>
+</tbody>
+</table>
+<p>多次实验，发现每次结果都与上表相同。在<strong>攻击者</strong>手上附魔有击退效果时，击退与<strong>攻击者</strong>的<strong>yaw值有关</strong>。</p>
+<p>我们多测试了如果是<strong>受害者yaw、pitch</strong>改变是否会影响击退，结果是<strong>受害者</strong>的朝向完全不影响击退，实验方式和上面差不多，篇幅原因，在此不列出实验详细过程。</p>
+<p>测试<strong>攻击者</strong>疾跑对击退的影响，为了不改变坐标的值，写个插件欺骗服务器，<strong>攻击者</strong>在攻击时强制变成疾跑状态。测试结果是，疾跑状态攻击相当于手上拿着击退1的武器的效果。</p>
+<p>因此我们可以推测，用击退1的武器疾跑着攻击对方，相当于行走状态或静止状态用击退2攻击对方一样。通过实验，证实了该推测。</p>
+<p>我们再次推测，在击退与两个玩家的位置和<strong>攻击者</strong>的<strong>yaw值有关</strong>，且如果<strong>攻击者</strong>不在疾跑且手上武器没有击退附魔时，击退就只跟两名玩家的位置有关(除非去掉<code>if(i&gt;0)</code>代码块使<code>motY+0.1</code>强制生效，许多服务端都有这样做)。</p>
+<p>用同样的方式，进行以下测试：</p>
+<ul>
+<li>测试<strong>攻击者</strong>与<strong>受害者</strong>所在位置存在高度差时，击退依然与上面一样，证明击退和高度差无关。</li>
+<li>测试<strong>攻击者</strong>与<strong>受害者</strong>所在位置的距离不同时，击退依然和上面一样。</li>
+<li>测试<strong>攻击者</strong>向<strong>受害者</strong>方向走动时攻击，击退依然和上面一样。</li>
+<li>测试<strong>攻击者</strong>跳劈，发现无论是上升状态还是下降状态，击退依然和上面一样。</li>
+</ul>
+<p>当<strong>受害者</strong>在空中时受到攻击，一般击退距离会更远。我们通过编写插件，使玩家站在地上(坐标和上面一样)时欺骗服务器玩家在空中，结果发现击退依然和上面一样。推测因为在空中，在掉落到地面之前有更长的时间在空中滑行，造成的更远击退的感觉。由于方块有Friction属性，也就是当玩家落到地面时速度会迅速降低，而空气的<code>Friction</code>比方块的要低，所以玩家在空中能被击退得更远。</p>
+<div class="admonition note"><p>这里所提到的方块<code>Friction</code>跟击退数值中的<code>Friction</code>不一样。</p>
+</div>
+<h2 id="各参数的作用">各参数的作用</h2>
+<p>回到参数上，如果不对原版击退的算法做出改变的话，仅修改算法中的几个参数，我们通常用感觉去判断击退的变化。通过了解上方原版击退的算法后，我们就可以知道那些参数的作用了。</p>
+<p>原始击退是指在原始计算中得到的<code>motX</code>、<code>Y</code>、<code>Z</code>的值。目前市面上很多击退插件是在最终击退值上乘以某倍数。</p>
+<h3 id="Friction">Friction</h3>
+<p>指在<strong>受害者</strong>受到攻击时，受到攻击前<strong>受害者</strong>的速度除以的值，一般大于1，这也是为什么它叫Friction(摩擦)的原因。如果该值等于1，那么此时玩家的速度将会加上击退赋予玩家的速度。如果小于1，则玩家的速度会变大再加上击退赋予玩家的速度。如果大于1，则玩家的速度会先缩短，再加上击退赋予玩家的速度。原版该值为2.0</p>
+<h3 id="Horizontal">Horizontal</h3>
+<p>指<strong>原始</strong>击退参数的<code>motX</code>、<code>motZ</code>减去值的倍数，原版为0.4</p>
+<h3 id="Vertical">Vertical</h3>
+<p>指<strong>原始</strong>击退参数的<code>motY</code>加上的值，原版为0.4</p>
+<h3 id="SprintHorizontalBoost-SHB">SprintHorizontalBoost, SHB</h3>
+<p>指最终计算完毕的击退中的<code>motX</code>和<code>motZ</code>在<strong>攻击者</strong>水平面上所指位置(yaw值所对应位置)加上的，<strong>攻击者</strong>朝向的向量与x和z轴的投影距离，乘以击退附魔等级+若疾跑加一得到的倍数，再乘以的SHB，即原始数据再加上的击退距离的倍数，原版为0.5</p>
+<h3 id="SprintVerticalBoost-SVB">SprintVerticalBoost, SVB</h3>
+<p>指最终计算完毕的击退中的<code>motY</code>再加上的值，原版为0.1</p>
+<h3 id="VerticalLimit">VerticalLimit</h3>
+<p>原始击退计算中，最高达到的<code>motY</code>，若超过这个值，则设为这个值。原版为<code>0.4000000059604645</code></p>
+<h2 id="对原版击退算法的理解-硬核慎入">对原版击退算法的理解(硬核慎入)</h2>
+<p>注意，当玩家静止不动或者站在地面时，他的<code>motY</code>为<code>-0.0784</code>，虽然如此，玩家并没有往下掉，这可能是因为脚下有方块的时候就不往下掉，该值可能是为了制造重力。<br>
+这也可以说明，为什么<code>Friction</code>调到很小(如0.01)的时候攻击玩家几乎无击退，因为这时<code>motY</code>除以<code>0.01</code>会变成<code>-7.84</code>，强力压在地上，导致地面对玩家的摩擦力较大，使玩家难以移动。<br>
+如果玩家在水中踩到地面，该值为<code>-0.02</code>(也许是重力减去浮力？)</p>
+<p>回到一开始，再次看到这个函数</p>
+<p><img src="https://i.loli.net/2020/04/01/rSVGJyPlBKc6HDW.png" alt="EntityLiving2.png"></p>
+<p>首先<strong>受害者</strong>受到了<strong>攻击者</strong>的一次攻击。在计算击退之前，<strong>受害者</strong>目前的速度除以Friction以缩短目前的速度(见上方<code>Friction</code>)。通常该值只作用于玩家正在移动的过程中，比如疾跑或者正在被击退。如果玩家是静止的，那么<code>motX</code>和<code>motZ</code>都是0。<br>
+如果玩家是在下落状态，则<code>motY</code>是负值，如果这个时候玩家受到攻击，<code>motY</code>会缩小，下落速度会变慢，这也是玩家在空中掉落的过程中受到攻击时会顿一下的原因。</p>
+<p>我们知道：</p>
+<ul>
+<li>d0为<strong>攻击者</strong>位置的X值减去<strong>受害者</strong>位置的X值，即为从<strong>受害者</strong>到<strong>攻击者</strong>的向量的X值。</li>
+<li>d1为<strong>攻击者</strong>位置的Z值减去<strong>受害者</strong>位置的X值，即为从<strong>受害者</strong>到<strong>攻击者</strong>的向量的Z值。</li>
+<li>f1为从<strong>受害者</strong>到<strong>攻击者</strong>的向量在水平面投影的长度。</li>
+</ul>
+<p>因此将d0和d1都除以f1后，向量<code>(d0/f1, d1/f1)</code>的模为1。<br>
+我们可以把一个长度为1的向量称为单位向量，它通常只为了表示方向。我们将把向量除以它的模的过程称为标准化向量，通常我们在只需要表示向量的方向，长度不重要，且要求该向量模为1的时候这样做。<br>
+接着两个值再乘以<code>f2</code>，即乘以0.4，表示把向量乘以0.4，也就是说把向量的模改为 根号0.32 。此时，水平面上的击退原始数据就计算完毕了。</p>
+<p>至于为什么<code>motX</code>和<code>motZ</code>是减去运算得出的数值，是因为上面算出来的向量是从<strong>受害者</strong>指向<strong>攻击者</strong>的向量，我们需要让<strong>受害者</strong>往后击退，而不是往<strong>攻击者</strong>飞过去，所以才是减去。</p>
+<p>再看到竖直上的击退，直接是目前的<code>motY</code>加上f2。最后，如果<code>motY</code>超过一个限制值(每错，就是那个小数点后老长的)，就设为那个限制值。您可能会问，才加0.4可能会超过吗？确实会，因为上面说过，在<strong>受害者</strong>再一次受到伤害前，玩家是飞在空中的。如果是combo模式(即玩家受到攻击后的无敌时间很短)，<strong>受害者</strong>再一次受到攻击时<code>motY</code>还很大，除以Friction后可能依然很大，所以为防止玩家飞起来就设置了一个限制值。</p>
+<p>再来看击退修正，</p>
+<p><img src="https://i.loli.net/2020/04/01/kxVR9mA1EsTNfOG.png" alt="EntityHuman1.png"></p>
+<p><code>entity.g</code> 这个函数可以理解为原速度加上目标速度，如<br>
+<code>entity.g(1, 2, 3)</code>就是<code>entity.motX += 1; entity.motY += 2; entity.motZ += 3; </code><br>
+<code>yaw * π / 180</code>就是将玩家朝向的欧拉角yaw值(角度)转为弧度。<br>
+在MC中，yaw的范围是<code>-180~179.9</code>。<br>
+也就是说，这里的<code>-sin(yaw * π / 180)</code>和<code>cos(yaw * π / 180)</code>依然是生成一个模为1的矢量。为什么模为1？我们把<code>yaw * π / 180</code>设为θ，由sin²θ + cos²θ = 1可知，该向量模为1。<br>
+将该向量乘以<code>i</code> 再乘以<code>0.5</code>，即可得到水平上修正的向量。<br>
+其中，<code>i</code>默认为<code>0</code>，如果玩家在疾跑状态则<code>+1</code>，如果玩家手上的物品有击退附魔，则再+击退附魔等级。<br>
+最后，<code>motY</code>再加<code>0.1</code>。<br>
+在原版中，如果<code>i&gt;0</code>，才会执行这段代码，如果<code>i=0</code>，则该代码不被执行，也就是说，<code>motY</code>也不会<code>+0.1</code>。<br>
+在著名服务端mSpigot上，由于i默认为1，且疾跑不影响i的值，所以该代码永远会被执行。<br>
+最后，把算到的击退交给事件触发器，由事件再次对向量进行更改(如果有的话)，最终将击退速度发送给客户端。</p>
+<p>我们可以看到，在算击退原始数据时，击退的方向是以玩家间的位置关系决定的。而在修正的过程中，却由<strong>攻击者</strong>的yaw值决定。这是印证了上面的实验。所以，如果有个玩家开挂，拿着击退棒背对着打你(请使用不会转过头去打的祖宗级秒被ban外挂实验并关闭反作弊)，你并不会往后退反而往黑客的方向飞去，也是这个道理。</p>
+<h2 id="如何抄袭猜测某服务器的击退">如何<s>抄袭</s>猜测某服务器的击退</h2>
+<p>如果该服务器的击退数值不是离散的(在相同情况下，击退总是相同，没有产生随机偏移)，且算法为MC原版算法，那么该服的击退数值将非常好猜。</p>
+<p>如果击退数值是离散的，那么可以通过统计算出击退数值的分布，然后根据分布的情况模拟随机的数值。比如上方的<code>Math.random() - Math.random()</code>就是-1~1中呈金字塔形的分布，如果是<code>Math.random()-0.5</code>就是在<code>-0.5~0.5</code>比较均匀的分布。除此之外，还有正态分布(<code>new Random().nextGaussian();</code>)等常见分布方式。</p>
+<p>我们需要的随机偏移一般不能太大，所以再乘以一个数如0.1缩小随机偏移量的范围。最后根据统计得出的分布规律猜测偏移的算法即可。</p>
+<p>由于每次击退服务器只会给你发送一个速度矢量，不可能在击退的过程中持续修正你的速度(不然延迟高的话就会乱飘。速度给你造成的位移一般由客户端计算)。所以，我们只要得出在各种情况下每次服务器发来的击退赋予的速度即可反推击退数值。</p>
+<blockquote>
+<p>为了方便获取击退数值，我特意写了一个mod来辅助您获取某服务器的击退。<br>
+版本: 1.8.9<br>
+请使用最新版本forge运行以保证兼容性(我们使用的forge版本是forge1.8.9-11.15.1.2318)<br>
+<s>当然，别对该mod抱有太大期望，比如按f3会挡住啥的</s><br>
+链接: <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/11BJ3Rtw-4YTDXECzIXWzAg">https://pan.baidu.com/s/11BJ3Rtw-4YTDXECzIXWzAg</a> 提取码: 77f3</p>
+</blockquote>
+<p>这个mod看起来是这样的：</p>
+<p><img src="https://i.loli.net/2020/04/03/l9fwgMSd5ATVFD7.png" alt="mod.png"></p>
+<p><s>什么？你被查端的时候因为这个太像挂端被封了？怪我咯</s></p>
+<ul>
+<li>Sprint: 你是否为疾跑状态</li>
+<li>Sneak: 你是否为潜行状态</li>
+<li>OnGround: 您是否站在地面
+<ul>
+<li>站在地面，指是否落地并站在地面。</li>
+<li>如果玩家被击飞、或者跳跃，该值为false。</li>
+<li>不过，如果玩家是在飞行状态，即使他的坐标是贴合地面的，OnGround也一定为false。</li>
+</ul>
+</li>
+<li>MotionX: 您的速度矢量的X值</li>
+<li>MotionY: 您的速度矢量的Y值</li>
+<li>MotionZ: 您的速度矢量的Z值</li>
+<li>Target: 您正在攻击的玩家的名字</li>
+<li>Distance: 您与您正在攻击的玩家的距离</li>
+<li>ShadowDistance: 您与您正在攻击的玩家的连线在水平面上的投影的距离
+<ul>
+<li>为什么需要水平面上的投影的距离？如果您有看上方原版击退的算法的话，您就会明白，击退的y值是另算的，玩家之间的位置关系只会决定x和z，y几乎不受玩家间位置影响。</li>
+</ul>
+</li>
+<li>TargetSprint: 您正在攻击的玩家是否为疾跑状态</li>
+<li>TargetSneak: 您正在攻击的玩家是否为潜行状态</li>
+<li>TargetOnGround: 您正在攻击的玩家是否站在地面</li>
+</ul>
+<div class="admonition note"><p class="admonition-title">为什么不顺便列出对方的速度矢量？
+</p><p>这是因为对方速度是服务器决定的，服务器只要告诉您对方的位置就可以了。服务端没必要把跟您无关的数据一并发送给您，浪费服务器资源，所以对方的速度矢量无意义。</p>
+<p>准备好后，您可以找一个小伙伴，一起装这个mod，然后进入您想测试击退的服务器。接着双方各开启录制~~(建议120帧)~~，模拟出各种情况，然后在视频剪辑软件中看每次攻击时赋予的速度即可。</p>
+<p>一定要记住有Friction这个值，也就是每次击退的时候会先削减<strong>受害者</strong>的速度，再加上计算出来的击退，不然在combo的时候每次值都不一样别以为是random再作祟。</p>
+</div>
+<h3 id="算法区别">算法区别</h3>
+<p>你猜测kb的服务器的算法不一定是原版算法，所以当您暴力计算后没得出任何结果的话，您可以再分析总体数据的变化和产生数据对应的情况去猜测算法。即便算法不一定相同，但只要最终算出来的结果是一样的，您的击退和你在<s>抄</s>的服务器的击退就是一样的。</p>
+<div class="admonition note"><p>syuu和kar都是使用了不同于原版的击退算法。</p>
+</div>
+<p>然后您可以写一个算法暴力算出误差小于0.0001的击退。</p>
+<h3 id="如何防止自己服的kb被盗">如何防止自己服的kb被盗</h3>
+<p>使最终计算出来的kb离散化，加上一些微小的随机的偏移，且使用的随机算法也是随机的(不然容易被使用统计方法算出随机算法)。总之，尽量在不影响kb总体感觉的情况下提高猜测kb的难度。</p>
+<h2 id="关于本文档">关于本文档</h2>
+<p>文档的主要研究者与作者: LSeng</p>
+<p>文档编写参与者: CarmJos</p>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li>
+         
+          <li><a href="/friends/">好友们</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">“脚本小子”对MC击退的研究成果</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E4%BB%A3%E7%A0%81%E7%9A%84%E5%88%86%E6%9E%90"><span class="toc-number">1.1.</span> <span class="toc-text">对于代码的分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EntityLiving%E7%B1%BB"><span class="toc-number">1.1.1.</span> <span class="toc-text">EntityLiving类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EntityHuman%E7%B1%BB"><span class="toc-number">1.1.2.</span> <span class="toc-text">EntityHuman类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8C%9C%E6%B5%8B%E4%B8%8E%E5%AE%9E%E9%AA%8C"><span class="toc-number">1.2.</span> <span class="toc-text">猜测与实验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%84%E5%8F%82%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">各参数的作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Friction"><span class="toc-number">1.3.1.</span> <span class="toc-text">Friction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Horizontal"><span class="toc-number">1.3.2.</span> <span class="toc-text">Horizontal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vertical"><span class="toc-number">1.3.3.</span> <span class="toc-text">Vertical</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SprintHorizontalBoost-SHB"><span class="toc-number">1.3.4.</span> <span class="toc-text">SprintHorizontalBoost, SHB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SprintVerticalBoost-SVB"><span class="toc-number">1.3.5.</span> <span class="toc-text">SprintVerticalBoost, SVB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VerticalLimit"><span class="toc-number">1.3.6.</span> <span class="toc-text">VerticalLimit</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E5%8E%9F%E7%89%88%E5%87%BB%E9%80%80%E7%AE%97%E6%B3%95%E7%9A%84%E7%90%86%E8%A7%A3-%E7%A1%AC%E6%A0%B8%E6%85%8E%E5%85%A5"><span class="toc-number">1.4.</span> <span class="toc-text">对原版击退算法的理解(硬核慎入)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%8A%84%E8%A2%AD%E7%8C%9C%E6%B5%8B%E6%9F%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%87%BB%E9%80%80"><span class="toc-number">1.5.</span> <span class="toc-text">如何抄袭猜测某服务器的击退</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E5%8C%BA%E5%88%AB"><span class="toc-number">1.5.1.</span> <span class="toc-text">算法区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2%E8%87%AA%E5%B7%B1%E6%9C%8D%E7%9A%84kb%E8%A2%AB%E7%9B%97"><span class="toc-number">1.5.2.</span> <span class="toc-text">如何防止自己服的kb被盗</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E6%96%87%E6%A1%A3"><span class="toc-number">1.6.</span> <span class="toc-text">关于本文档</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/dev/knockback-study.html"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/dev/knockback-study.html&text=对我的世界中PVP击退的研究报告"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/dev/knockback-study.html&is_video=false&description=对我的世界中PVP击退的研究报告"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=对我的世界中PVP击退的研究报告&body=Check out this article: https://pages.carm.cc/dev/knockback-study.html"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/dev/knockback-study.html&title=对我的世界中PVP击退的研究报告"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/dev/knockback-study.html&name=对我的世界中PVP击退的研究报告&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/dev/knockback-study.html&t=对我的世界中PVP击退的研究报告"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2023
+    CarmJos
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6T85H5QT8K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6T85H5QT8K');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'CarmJos/CarmJos';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Pages Comment';
+      var utterances_theme = 'github-light';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>

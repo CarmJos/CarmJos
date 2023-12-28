@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="C语言命名规范——以UNIX风格为例 优秀的C语言代码通常遵循通用的代码规范原则，以确保代码的可读性和一致性。 虽然这些规则不是强制性的，但遵循它们可以大大帮助保持代码的逻辑可读性和一致性，特别是在团队协作或大型项目中。 不同的项目或团队可能有自己的命名约定，所以最重要的是在一个项目或团队内保持一致性。 基本规范   避免使用保留字和标准库命名:  避免使用C语言的关键字（如 int, retur">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言命名规范——以UNIX风格为例">
+<meta property="og:url" content="https://pages.carm.cc/doc/c-name-rules.html">
+<meta property="og:site_name" content="Carm&#39;s Pages">
+<meta property="og:description" content="C语言命名规范——以UNIX风格为例 优秀的C语言代码通常遵循通用的代码规范原则，以确保代码的可读性和一致性。 虽然这些规则不是强制性的，但遵循它们可以大大帮助保持代码的逻辑可读性和一致性，特别是在团队协作或大型项目中。 不同的项目或团队可能有自己的命名约定，所以最重要的是在一个项目或团队内保持一致性。 基本规范   避免使用保留字和标准库命名:  避免使用C语言的关键字（如 int, retur">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-28T11:30:00.000Z">
+<meta property="article:modified_time" content="2023-12-28T11:36:35.392Z">
+<meta property="article:author" content="CarmJos">
+<meta property="article:tag" content="dev">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>C语言命名规范——以UNIX风格为例</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="Carm&#39;s Pages" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/dev/why-plugins-huge.html"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/doc/c-name-rules.html"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/doc/c-name-rules.html&text=C语言命名规范——以UNIX风格为例"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/doc/c-name-rules.html&is_video=false&description=C语言命名规范——以UNIX风格为例"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=C语言命名规范——以UNIX风格为例&body=Check out this article: https://pages.carm.cc/doc/c-name-rules.html"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/doc/c-name-rules.html&name=C语言命名规范——以UNIX风格为例&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/doc/c-name-rules.html&t=C语言命名规范——以UNIX风格为例"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">C语言命名规范——以UNIX风格为例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%A7%84%E8%8C%83"><span class="toc-number">1.1.</span> <span class="toc-text">基本规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%AE%9A%E6%83%85%E5%86%B5"><span class="toc-number">1.2.</span> <span class="toc-text">特定情况</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%96%87%E4%BB%B6%E5%91%BD%E5%90%8D"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 文件命名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%8F%98%E9%87%8F%E4%B8%8E%E5%B8%B8%E9%87%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 变量与常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%96%B9%E6%B3%95%E4%B8%8E%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. 方法与函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-number">1.2.4.</span> <span class="toc-text">4. 类型与结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%AE%8F%E5%8F%98%E9%87%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.2.5.</span> <span class="toc-text">5. 宏变量与枚举</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C%E5%8D%95%E8%AF%8D"><span class="toc-number">1.3.</span> <span class="toc-text">常见操作单词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E7%BC%A9%E5%86%99"><span class="toc-number">1.4.</span> <span class="toc-text">通用缩写</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        C语言命名规范——以UNIX风格为例
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">CarmJos</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-12-28T11:30:00.000Z" itemprop="datePublished">2023-12-28</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/doc/">doc</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/dev/" rel="tag">dev</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h1>C语言命名规范——以UNIX风格为例</h1>
+<p>优秀的C语言代码通常遵循通用的代码规范原则，以确保代码的可读性和一致性。</p>
+<p>虽然这些规则不是强制性的，但遵循它们可以大大帮助保持代码的逻辑可读性和一致性，特别是在团队协作或大型项目中。<br>
+不同的项目或团队可能有自己的命名约定，所以最重要的是在一个项目或团队内保持一致性。</p>
+<h2 id="基本规范">基本规范</h2>
+<ol>
+<li>
+<p><strong>避免使用保留字和标准库命名</strong>:</p>
+<ul>
+<li>避免使用C语言的关键字（如 <code>int</code>, <code>return</code>, <code>struct</code> 等）作为变量名。</li>
+<li>同样，避免使用可能与标准库函数冲突的名称。</li>
+</ul>
+</li>
+<li>
+<p><strong>使用简洁且具有描述性的名称</strong>:</p>
+<ul>
+<li>选择简洁且具有描述性的名称，使其能够清晰地表达变量或函数的用途。例如，使用 <code>calculate_speed()</code> 而不是 <code>cs()</code>。</li>
+<li>避免使用无意义的名称，如 <code>a</code>、<code>qwq</code> 或 <code>foo</code>。</li>
+<li>选择单词时，首先要保障“<strong>贴切</strong>”，即词能达意，其次再去考虑长短。</li>
+<li>尽量避免使用缩写，除非它们是通用的或广泛使用的。例如，<code>str</code> 代表字符串，<code>len</code> 代表长度。见 <a href="#%E9%80%9A%E7%94%A8%E7%BC%A9%E5%86%99">通用缩写</a>。</li>
+</ul>
+</li>
+<li>
+<p><strong>保持一致性</strong>：在同一项目或团队中保持文件命名的一致性非常重要。个人或团队内部应该商定并遵守统一的命名规范。</p>
+</li>
+</ol>
+<blockquote>
+<p><em>注1:</em> 也有一种命名函数名的风格是 首字母小写,后面单词首字母大写,中间不用连接符, 比如 <code>getMaxValue()</code>。<br>
+而类名单词首字母大写不用分隔符,如 <code>class MyDateClass</code>；<br>
+类的成员数据和方法的首单词首字母小写后面的单词首字母大写 如 <code>int superValue</code>。</p>
+<p>JAVA的代码风格就是大致如此。</p>
+</blockquote>
+<h2 id="特定情况">特定情况</h2>
+<h3 id="1-文件命名">1. 文件命名</h3>
+<p>在C语言项目中，文件命名的规范有助于帮助构建项目的整体结构。以下是一些常见的文件命名规范：</p>
+<ol>
+<li><strong>使用小写字母</strong>：文件名通常全部使用小写字母，以避免操作系统之间的兼容性问题（特别是在区分大小写的系统中）。</li>
+<li><strong>使用下划线分隔</strong>：单词之间使用下划线（_）分隔，以提高可读性。例如：<code>char_calc.c</code> 或 <code>data_processing.h</code>。</li>
+<li><strong>简洁且具描述性</strong>：文件名应简洁且能够清楚地描述文件内容。例如，如果文件包含一个实现链表功能的模块，则可以命名为 <code>linked_list.c</code>。</li>
+<li><strong>区分头文件和源文件</strong>：
+<ul>
+<li>源文件（.c 文件）：包含C语言的实现代码。例如：<code>main.c</code>, <code>score_calc.c</code>。</li>
+<li>头文件（.h 文件）：包含函数声明、宏定义和类型定义等。与源文件相关联，通常名称相似。例如：<code>utils.h</code> 用于存放工具方法。</li>
+</ul>
+</li>
+<li><strong>避免使用空格和特殊字符</strong>：避免在文件名中使用空格和特殊字符，如<code>%</code>, <code>&amp;</code>, <code>*</code>等，因为它们可能导致在某些环境或命令行操作中出现问题。</li>
+<li><strong>使用有意义的前缀或后缀</strong>：对于大型项目，可以使用前缀或后缀来指示文件属于哪个模块或子系统。例如，使用<code>gui_button.c</code> 来表示该文件为图形用户界面模块中的按钮相关代码。</li>
+<li><strong>避免过长的文件名</strong>：虽然现代操作系统支持较长的文件名，但过长的文件名可能不便于管理、识别和调用。所以，尽量保持文件名长度合理。</li>
+</ol>
+<h3 id="2-变量与常量">2. 变量与常量</h3>
+<p>局部变量命名应当 <strong>全部使用小写字母，单词之间用下划线分隔</strong> 。<br>
+局部变量可以简短，因为它们的作用域有限。例如：</p>
+<ul>
+<li><code>int my_variable;</code></li>
+<li><code>void calculate_total();</code></li>
+</ul>
+<p>全局变量应该更加谨慎命名，可以使用前缀以避免命名冲突，例如：</p>
+<ul>
+<li><code>int g_some_value = 10;</code> 其中 <code>g_</code> 为前缀，代表 <em>GLOBAL</em>，即全局。</li>
+</ul>
+<p>对于常量，可以使用 <code>const</code> 关键字来定义，并采用 <strong>全大写下划线</strong> 风格例如：</p>
+<ul>
+<li><code>static const int DENOMINATIONS[] = &#123; 2000, 1000 &#125;;</code> <a target="_blank" rel="noopener" href="https://github.com/carm-outsource/CWorks/blob/master/src/calculator/change_calc.c#L7">[实例]</a></li>
+</ul>
+<p>而 <code>i, j, k, m, n, x, y, z</code> 等单字母变量普遍被用在索引、循环语句控制、数学函数等处。<br>
+这是一种约定俗成的习惯，但是在其他地方使用单字母变量是不被推荐的，且不应当滥用。</p>
+<h3 id="3-方法与函数">3. 方法与函数</h3>
+<p>针对于方法，我们一般采取 “<code>动词_名词</code>” 的命名方式，且应当 <strong>全部使用小写字母，单词之间用下划线分隔</strong> ，例如：</p>
+<ul>
+<li><code>int get_file();</code></li>
+<li><code>int calculate_total();</code></li>
+<li><code>int get_max_value();</code></li>
+<li><code>int is_valid();</code></li>
+</ul>
+<p>其中“动词” 通常用于表示方法的操作，例如 <code>calculate_total()</code> 计算总数，<br>
+“名词” 通常用于表示方法的返回值类型，例如 <code>get_max_value()</code> 返回一个最大值。<br>
+该部分是可选的，比如 有些方法不需要返回值，或者返回的内容已经隐藏在动词方法名或模块名中。</p>
+<h3 id="4-类型与结构体">4. 类型与结构体</h3>
+<p>自定义类型（如结构体和联合体）通常使用<strong>大驼峰式</strong>或<strong>全大写下划线</strong>风格。例如：</p>
+<ul>
+<li><code>typedef struct &#123; ... &#125; MyStruct;</code></li>
+<li><code>typedef struct &#123; ... &#125; MY_STRUCT;</code></li>
+</ul>
+<h3 id="5-宏变量与枚举">5. 宏变量与枚举</h3>
+<p>宏常量和枚举通常全部使用大写字母，单词之间用下划线分隔。这样做是为了与普通变量和函数区分开。例如：</p>
+<ul>
+<li><code>#define MAX_LENGTH 100</code></li>
+<li><code>enum &#123; RED, GREEN, BLUE &#125;;</code></li>
+</ul>
+<h2 id="常见操作单词">常见操作单词</h2>
+<ul>
+<li>add/remove</li>
+<li>begin/end</li>
+<li>create/destroy</li>
+<li>insert/delete</li>
+<li>first/last</li>
+<li>get/release</li>
+<li>increment/decrement</li>
+<li>put/get</li>
+<li>add/delete</li>
+<li>lock/unlock</li>
+<li>open/close</li>
+<li>min/max</li>
+<li>old/new</li>
+<li>start/stop</li>
+<li>next/previous</li>
+<li>source/target</li>
+<li>show/hide</li>
+<li>send/receiver</li>
+<li>source/destination</li>
+<li>copy/paste</li>
+<li>up/down</li>
+</ul>
+<h2 id="通用缩写">通用缩写</h2>
+<p>这里是一些通用的缩写，选择性使用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">addition —&gt; add</span><br><span class="line">answer —&gt; ans</span><br><span class="line">array —&gt; arr</span><br><span class="line">average—&gt;avg </span><br><span class="line">argument —&gt; arg</span><br><span class="line">buffer —&gt; buff/buf</span><br><span class="line">clock —&gt; clk</span><br><span class="line">calculate —&gt; calc</span><br><span class="line">column —&gt; col</span><br><span class="line">control —&gt; ctrl</span><br><span class="line">command —&gt; cmd</span><br><span class="line">compare —&gt; cmp</span><br><span class="line">configuration —&gt; config/cfg</span><br><span class="line">count —&gt; cnt</span><br><span class="line">define —&gt; def</span><br><span class="line">delete —&gt; del</span><br><span class="line">destination—&gt;dst/dest</span><br><span class="line">display—&gt; disp</span><br><span class="line">device —&gt; dev</span><br><span class="line">decode —&gt; dec</span><br><span class="line">division —&gt; div</span><br><span class="line">frequency—&gt;freq</span><br><span class="line">error —&gt; err</span><br><span class="line">environment —&gt; env</span><br><span class="line">encode —&gt; enc</span><br><span class="line">hexadecimal —&gt; hex</span><br><span class="line">header —&gt; hdr</span><br><span class="line">index —&gt; idx</span><br><span class="line">image —&gt; img</span><br><span class="line">initialize —&gt; init</span><br><span class="line">increment —&gt; inc</span><br><span class="line">length—&gt;len</span><br><span class="line">make —&gt; mk</span><br><span class="line">maximum —&gt; max</span><br><span class="line">message —&gt; msg</span><br><span class="line">minimum —&gt; min</span><br><span class="line">multiplication—&gt;multi</span><br><span class="line">memory—&gt;mem</span><br><span class="line">middle—&gt;mid</span><br><span class="line">number —&gt; num</span><br><span class="line">option—&gt;opt</span><br><span class="line">parameter —&gt; para</span><br><span class="line">previous —&gt; prev</span><br><span class="line">pointer —&gt; ptr</span><br><span class="line">register —&gt; reg</span><br><span class="line">receiver—&gt;recv</span><br><span class="line">return —&gt; ret</span><br><span class="line">result—&gt;res</span><br><span class="line">source —&gt; src</span><br><span class="line">stack—&gt;stk</span><br><span class="line">string—&gt;str</span><br><span class="line">subtraction—&gt;sub</span><br><span class="line">semaphore —&gt; sem</span><br><span class="line">statistic —&gt; stat</span><br><span class="line">synchronize —&gt; sync</span><br><span class="line">table —&gt;tab</span><br><span class="line">temp —&gt; tmp</span><br><span class="line">temporary—&gt;tmp/temp</span><br><span class="line">timestamp—&gt;ts</span><br><span class="line">value—&gt;val</span><br><span class="line">width—&gt;wid</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li>
+         
+          <li><a href="/friends/">好友们</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">C语言命名规范——以UNIX风格为例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%A7%84%E8%8C%83"><span class="toc-number">1.1.</span> <span class="toc-text">基本规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E5%AE%9A%E6%83%85%E5%86%B5"><span class="toc-number">1.2.</span> <span class="toc-text">特定情况</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%96%87%E4%BB%B6%E5%91%BD%E5%90%8D"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 文件命名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%8F%98%E9%87%8F%E4%B8%8E%E5%B8%B8%E9%87%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 变量与常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%96%B9%E6%B3%95%E4%B8%8E%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. 方法与函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-number">1.2.4.</span> <span class="toc-text">4. 类型与结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%AE%8F%E5%8F%98%E9%87%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.2.5.</span> <span class="toc-text">5. 宏变量与枚举</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C%E5%8D%95%E8%AF%8D"><span class="toc-number">1.3.</span> <span class="toc-text">常见操作单词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E7%BC%A9%E5%86%99"><span class="toc-number">1.4.</span> <span class="toc-text">通用缩写</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/doc/c-name-rules.html"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/doc/c-name-rules.html&text=C语言命名规范——以UNIX风格为例"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/doc/c-name-rules.html&is_video=false&description=C语言命名规范——以UNIX风格为例"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=C语言命名规范——以UNIX风格为例&body=Check out this article: https://pages.carm.cc/doc/c-name-rules.html"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/doc/c-name-rules.html&title=C语言命名规范——以UNIX风格为例"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/doc/c-name-rules.html&name=C语言命名规范——以UNIX风格为例&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/doc/c-name-rules.html&t=C语言命名规范——以UNIX风格为例"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2023
+    CarmJos
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6T85H5QT8K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6T85H5QT8K');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'CarmJos/CarmJos';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Pages Comment';
+      var utterances_theme = 'github-light';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>

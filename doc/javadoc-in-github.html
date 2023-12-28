@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="需求 由于想开一个新坑，打算把项目通过Maven生成的的Javadoc使用 Github Actions 自动部署到同项目下 gh-pages 分支，作为该项目 Github Pages 的主页供其他人参考。 操作 1. 配置 Maven 生成JavaDoc 首先在项目的 pom.xml 中添加 Maven Javadoc Plugin ,依赖这个插件，我们可以自动生成JavaDoc。 12345">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自动部署Javadoc到Github Pages">
+<meta property="og:url" content="https://pages.carm.cc/doc/javadoc-in-github.html">
+<meta property="og:site_name" content="Carm&#39;s Pages">
+<meta property="og:description" content="需求 由于想开一个新坑，打算把项目通过Maven生成的的Javadoc使用 Github Actions 自动部署到同项目下 gh-pages 分支，作为该项目 Github Pages 的主页供其他人参考。 操作 1. 配置 Maven 生成JavaDoc 首先在项目的 pom.xml 中添加 Maven Javadoc Plugin ,依赖这个插件，我们可以自动生成JavaDoc。 12345">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pages.carm.cc/images/javadoc-in-github/generate-key.png">
+<meta property="og:image" content="https://pages.carm.cc/images/javadoc-in-github/add-secret.png">
+<meta property="og:image" content="https://pages.carm.cc/images/javadoc-in-github/confirm-add-secret.png">
+<meta property="og:image" content="https://pages.carm.cc/images/javadoc-in-github/add-deploy-keys.png">
+<meta property="og:image" content="https://pages.carm.cc/images/javadoc-in-github/confirm-add-deploy-key.png">
+<meta property="og:image" content="https://pages.carm.cc/images/javadoc-in-github/run-action.png">
+<meta property="og:image" content="https://pages.carm.cc/images/javadoc-in-github/setting-pages.png">
+<meta property="article:published_time" content="2021-11-23T17:24:00.000Z">
+<meta property="article:modified_time" content="2023-12-28T11:36:35.392Z">
+<meta property="article:author" content="CarmJos">
+<meta property="article:tag" content="dev">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Github">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pages.carm.cc/images/javadoc-in-github/generate-key.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>自动部署Javadoc到Github Pages</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="Carm&#39;s Pages" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/dev/why-plugins-huge.html"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/doc/branch-main.html"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/doc/javadoc-in-github.html"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/doc/javadoc-in-github.html&text=自动部署Javadoc到Github Pages"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/doc/javadoc-in-github.html&is_video=false&description=自动部署Javadoc到Github Pages"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=自动部署Javadoc到Github Pages&body=Check out this article: https://pages.carm.cc/doc/javadoc-in-github.html"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/doc/javadoc-in-github.html&name=自动部署Javadoc到Github Pages&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/doc/javadoc-in-github.html&t=自动部署Javadoc到Github Pages"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE-Maven-%E7%94%9F%E6%88%90JavaDoc"><span class="toc-number">2.1.</span> <span class="toc-text">1. 配置 Maven 生成JavaDoc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AEGithub%E9%A1%B9%E7%9B%AE%E7%9A%84Deploy-Keys%E4%B8%8ESecrets"><span class="toc-number">2.2.</span> <span class="toc-text">2. 配置Github项目的Deploy Keys与Secrets</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#a-%E7%94%9F%E6%88%90-OpenSSH-%E5%AF%86%E9%92%A5"><span class="toc-number">2.2.1.</span> <span class="toc-text">a. 生成 OpenSSH 密钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#b-%E6%B7%BB%E5%8A%A0%E7%A7%81%E9%92%A5%E5%88%B0-Secrets"><span class="toc-number">2.2.2.</span> <span class="toc-text">b. 添加私钥到 Secrets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c-%E6%B7%BB%E5%8A%A0%E5%85%AC%E9%92%A5%E5%88%B0-Deploy-Keys"><span class="toc-number">2.2.3.</span> <span class="toc-text">c. 添加公钥到 Deploy Keys</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE-Github-Actions"><span class="toc-number">2.3.</span> <span class="toc-text">3. 配置 Github Actions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%AE%BE%E7%BD%AE-Github-Pages"><span class="toc-number">2.4.</span> <span class="toc-text">4. 设置 Github Pages</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">3.</span> <span class="toc-text">参考文献</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        自动部署Javadoc到Github Pages
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">CarmJos</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-11-23T17:24:00.000Z" itemprop="datePublished">2021-11-24</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/doc/">doc</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Github/" rel="tag">Github</a>, <a class="tag-link-link" href="/tags/Java/" rel="tag">Java</a>, <a class="tag-link-link" href="/tags/dev/" rel="tag">dev</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="需求">需求</h2>
+<p>由于想开一个新坑，打算把项目通过Maven生成的的Javadoc使用 <a target="_blank" rel="noopener" href="https://docs.github.com/en/actions/learn-github-actions">Github Actions</a> 自动部署到同项目下 <code>gh-pages</code> 分支，作为该项目 <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Pages</a> 的主页供其他人参考。</p>
+<h2 id="操作">操作</h2>
+<h3 id="1-配置-Maven-生成JavaDoc">1. 配置 Maven 生成JavaDoc</h3>
+<p>首先在项目的 <code>pom.xml</code> 中添加 <a target="_blank" rel="noopener" href="https://maven.apache.org/plugins/maven-javadoc-plugin/">Maven Javadoc Plugin</a> ,依赖这个插件，我们可以自动生成JavaDoc。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-javadoc-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.2.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">classifier</span>&gt;</span>javadoc<span class="tag">&lt;/<span class="name">classifier</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">detectJavaApiLink</span>&gt;</span>true<span class="tag">&lt;/<span class="name">detectJavaApiLink</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">charset</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">charset</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">docencoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">docencoding</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- &lt;locale&gt;zh_CN&lt;/locale&gt; 可选，使用中文的界面--&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">id</span>&gt;</span>attach-javadocs<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">goal</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>设置过后，我们就可以输入 <code>mvn javadoc:javadoc</code> 命令生成该项目的Javadoc了，生成的路径一般在 <code>target/site/apidoc/</code> 下。</p>
+<div class="admonition note"><p>如果是使用的 <code>mvn package</code> 命令，则会生成在 <code>target/apidoc/</code> 下。</p>
+</div>
+<h3 id="2-配置Github项目的Deploy-Keys与Secrets">2. 配置Github项目的<code>Deploy Keys</code>与<code>Secrets</code></h3>
+<p>因为我们需要把Javadoc放到同项目下的<code>gh-pages</code>分支，因此在Actions中需要进行认证操作，才可以正常推送。</p>
+<p>这里我们打算采用SSH进行推送，并通过 Deploy Keys 进行认证。</p>
+<h4 id="a-生成-OpenSSH-密钥">a. 生成 OpenSSH 密钥</h4>
+<p>我们可以访问 <a target="_blank" rel="noopener" href="https://8gwifi.org/sshfunctions.jsp">Generate SSH Keys Online</a> 在线生成一个密钥。</p>
+<p><img src="/images/javadoc-in-github/generate-key.png" alt="generate key"></p>
+<p>点击后，在下方会生成对应的私钥(Private Key)与公钥(Public Key)，我们先记下。</p>
+<h4 id="b-添加私钥到-Secrets">b. 添加私钥到 <code>Secrets</code></h4>
+<p>复制上一步得到的私钥，添加到项目的<code>Secrets</code>中。</p>
+<p><img src="/images/javadoc-in-github/add-secret.png" alt="add secret"></p>
+<p>名字(Name)填<code>DEPLOY_PRI</code>,数值(Value)填私钥内容</p>
+<p><img src="/images/javadoc-in-github/confirm-add-secret.png" alt="confirm secret"></p>
+<h4 id="c-添加公钥到-Deploy-Keys">c. 添加公钥到 <code>Deploy Keys</code></h4>
+<p>复制之前得到的公钥，添加到项目的<code>Deploy Keys</code>中。</p>
+<p><img src="/images/javadoc-in-github/add-deploy-keys.png" alt="add deploy key"></p>
+<p>名字(Title)可以随便填，我这里选择的是<code>JAVADOC_DEPLOY</code>，密钥(Key)填公钥内容。注意一定要勾选 “<strong>Allow write access</strong>”, 这样才可以被用于推送。</p>
+<p><img src="/images/javadoc-in-github/confirm-add-deploy-key.png" alt="confirm deploy key"></p>
+<h3 id="3-配置-Github-Actions">3. 配置 Github Actions</h3>
+<p>在项目下新建 <code>.github/workflows/javadoc.yml</code> 文件。这个文件会被自动识别为<a target="_blank" rel="noopener" href="https://docs.github.com/en/actions/learn-github-actions">Github Actions</a>配置文件。</p>
+<div class="admonition note"><p>记得也要在Settings中启用 Github Actions ，否则无法使用哦。</p>
+</div>
+<p>内容如下</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Javadoc</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="comment"># 支持手动触发构建</span></span><br><span class="line">  <span class="attr">workflow_dispatch:</span></span><br><span class="line">  <span class="attr">release:</span></span><br><span class="line">    <span class="comment"># 创建release的时候触发</span></span><br><span class="line">    <span class="attr">types:</span> [ <span class="string">published</span> ]</span><br><span class="line"><span class="comment">#  push: # 可选，在推送主分支时触发</span></span><br><span class="line"><span class="comment">#    branches:</span></span><br><span class="line"><span class="comment">#    - main</span></span><br><span class="line"><span class="comment">#    - master</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">apidoc-deploy:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span> <span class="string">the</span> <span class="string">repo</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Set</span> <span class="string">up</span> <span class="string">the</span> <span class="string">Java</span> <span class="string">JDK</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/setup-java@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">java-version:</span> <span class="string">&#x27;11&#x27;</span></span><br><span class="line">          <span class="attr">distribution:</span> <span class="string">&#x27;adopt&#x27;</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Generate</span> <span class="string">docs</span> <span class="comment">#生成Javadoc</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">mvn</span> <span class="string">javadoc:javadoc</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Copy</span> <span class="string">to</span> <span class="string">Location</span> <span class="comment"># 复制Javadoc到一个新文件夹，便于进行git操作</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          rm -rf docs</span></span><br><span class="line"><span class="string">          mkdir -vp docs</span></span><br><span class="line"><span class="string">          cp -vrf target/site/apidocs/* docs/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Generate</span> <span class="string">the</span> <span class="string">sitemap</span> <span class="comment"># 可选，生成sitemap</span></span><br><span class="line">        <span class="attr">id:</span> <span class="string">sitemap</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">cicirello/generate-sitemap@v1</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">base-url-path:</span> <span class="string">https://carmjos.github.io/userprefix</span></span><br><span class="line">          <span class="attr">path-to-root:</span> <span class="string">docs</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Configure</span> <span class="string">Git</span> <span class="comment"># 配置Git</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="attr">DEPLOY_PRI:</span> <span class="string">$&#123;&#123;secrets.DEPLOY_PRI&#125;&#125;</span> <span class="comment"># 这里就是刚刚配置的私钥了</span></span><br><span class="line">          <span class="attr">GIT_USERNAME:</span> <span class="string">$&#123;&#123;</span> <span class="string">github.repository_owner</span> <span class="string">&#125;&#125;</span> <span class="comment">#Github用户名，这里用了Actions自带的变量，也可以写死。</span></span><br><span class="line">          <span class="attr">GIT_EMAIL:</span> <span class="string">$&#123;&#123;</span> <span class="string">github.repository_owner</span> <span class="string">&#125;&#125;@user.github.com</span> <span class="comment"># 邮箱,可以写自己的邮箱。</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          sudo timedatectl set-timezone &quot;Asia/Shanghai&quot;</span></span><br><span class="line"><span class="string">          mkdir -p ~/.ssh/</span></span><br><span class="line"><span class="string">          echo &quot;$DEPLOY_PRI&quot; &gt; ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">          chmod 600 ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">          ssh-keyscan github.com &gt;&gt; ~/.ssh/known_hosts</span></span><br><span class="line"><span class="string">          git config --global user.name &#x27;$DEPLOY_PRI&#x27;</span></span><br><span class="line"><span class="string">          git config --global user.email &#x27;$DEPLOY_PRI&#x27;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Commit</span> <span class="string">documentation</span> <span class="comment"># 提交文档到Git仓库</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="attr">GIT_URL:</span> <span class="string">&quot;git@github.com:&lt;USERNAME&gt;/&lt;PROJECT&gt;.git&quot;</span> <span class="comment"># 项目的地址，注意要用SSH格式的。</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          cd docs</span></span><br><span class="line"><span class="string">          git init</span></span><br><span class="line"><span class="string">          git remote add origin $GIT_URL</span></span><br><span class="line"><span class="string">          git checkout -b gh-pages</span></span><br><span class="line"><span class="string">          git add -A</span></span><br><span class="line"><span class="string">          git commit -m &quot;API Document generated.&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Push</span> <span class="string">javadocs</span> <span class="comment"># 推送</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          cd docs</span></span><br><span class="line"><span class="string">          git push origin HEAD:gh-pages --force</span></span><br></pre></td></tr></table></figure>
+<p>随后，推送项目，在Actions界面找到该配置，手动触发一次。</p>
+<p><img src="/images/javadoc-in-github/run-action.png" alt="run-action"></p>
+<p>等待其正常跑完，即可发现多了一个 <code>gh-pages</code> 分支。</p>
+<h3 id="4-设置-Github-Pages">4. 设置 Github Pages</h3>
+<p>在项目的Settings界面找到 Pages 一栏，选择 <code>gh-pages</code> 分支，点击 Save ，等待片刻即可访问 <code>&lt;用户名&gt;.github.io/&lt;项目名&gt;</code> 看到项目的Javadoc了。</p>
+<p><img src="/images/javadoc-in-github/setting-pages.png" alt="Setting Pages.png"></p>
+<h2 id="参考文献">参考文献</h2>
+<ul>
+<li>&lt; <a target="_blank" rel="noopener" href="https://docs.github.com/en/actions">Github Actions Documentation</a> &gt;</li>
+<li>&lt; <a target="_blank" rel="noopener" href="https://maven.apache.org/plugins/maven-javadoc-plugin/index.html">Apache Maven Javadoc Plugin</a> &gt;</li>
+<li>&lt; <a target="_blank" rel="noopener" href="https://ucsb-cs56-pconrad.github.io/topics/javadoc_publishing_to_github_pages_from_public_repo/">javadoc: publishing to github pages from a public repo</a> &gt;</li>
+</ul>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li>
+         
+          <li><a href="/friends/">好友们</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE-Maven-%E7%94%9F%E6%88%90JavaDoc"><span class="toc-number">2.1.</span> <span class="toc-text">1. 配置 Maven 生成JavaDoc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AEGithub%E9%A1%B9%E7%9B%AE%E7%9A%84Deploy-Keys%E4%B8%8ESecrets"><span class="toc-number">2.2.</span> <span class="toc-text">2. 配置Github项目的Deploy Keys与Secrets</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#a-%E7%94%9F%E6%88%90-OpenSSH-%E5%AF%86%E9%92%A5"><span class="toc-number">2.2.1.</span> <span class="toc-text">a. 生成 OpenSSH 密钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#b-%E6%B7%BB%E5%8A%A0%E7%A7%81%E9%92%A5%E5%88%B0-Secrets"><span class="toc-number">2.2.2.</span> <span class="toc-text">b. 添加私钥到 Secrets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c-%E6%B7%BB%E5%8A%A0%E5%85%AC%E9%92%A5%E5%88%B0-Deploy-Keys"><span class="toc-number">2.2.3.</span> <span class="toc-text">c. 添加公钥到 Deploy Keys</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE-Github-Actions"><span class="toc-number">2.3.</span> <span class="toc-text">3. 配置 Github Actions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%AE%BE%E7%BD%AE-Github-Pages"><span class="toc-number">2.4.</span> <span class="toc-text">4. 设置 Github Pages</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">3.</span> <span class="toc-text">参考文献</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/doc/javadoc-in-github.html"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/doc/javadoc-in-github.html&text=自动部署Javadoc到Github Pages"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/doc/javadoc-in-github.html&is_video=false&description=自动部署Javadoc到Github Pages"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=自动部署Javadoc到Github Pages&body=Check out this article: https://pages.carm.cc/doc/javadoc-in-github.html"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/doc/javadoc-in-github.html&title=自动部署Javadoc到Github Pages"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/doc/javadoc-in-github.html&name=自动部署Javadoc到Github Pages&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/doc/javadoc-in-github.html&t=自动部署Javadoc到Github Pages"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2023
+    CarmJos
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6T85H5QT8K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6T85H5QT8K');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'CarmJos/CarmJos';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Pages Comment';
+      var utterances_theme = 'github-light';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>

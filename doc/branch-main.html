@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="发现 一开始接触 Git 的时候，默认的分支名都为 master ，包括后续使用的时候也习惯于输入master进行各类操作。 而我最近发现，Github 与 Gitlab 都开始使用 main 取代原先的 master 作为项目的默认主分支了，这是为什么呢？ 起源 - “Black Lives Matter” 自2020年六月起，由于“Black Lives Matter”抗议活动持续发酵，而计算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么Git分支开始从“master”变为“main”了？">
+<meta property="og:url" content="https://pages.carm.cc/doc/branch-main.html">
+<meta property="og:site_name" content="Carm&#39;s Pages">
+<meta property="og:description" content="发现 一开始接触 Git 的时候，默认的分支名都为 master ，包括后续使用的时候也习惯于输入master进行各类操作。 而我最近发现，Github 与 Gitlab 都开始使用 main 取代原先的 master 作为项目的默认主分支了，这是为什么呢？ 起源 - “Black Lives Matter” 自2020年六月起，由于“Black Lives Matter”抗议活动持续发酵，而计算">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pages.carm.cc/images/branch-main/una_kravets.png">
+<meta property="og:image" content="https://pages.carm.cc/images/branch-main/settings.png">
+<meta property="article:published_time" content="2021-11-02T05:32:02.000Z">
+<meta property="article:modified_time" content="2023-12-28T11:36:35.392Z">
+<meta property="article:author" content="CarmJos">
+<meta property="article:tag" content="dev">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Cultural">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pages.carm.cc/images/branch-main/una_kravets.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>为什么Git分支开始从“master”变为“main”了？</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="Carm&#39;s Pages" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/doc/javadoc-in-github.html"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/letter/cn2b2t.html"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/doc/branch-main.html"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/doc/branch-main.html&text=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/doc/branch-main.html&is_video=false&description=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=为什么Git分支开始从“master”变为“main”了？&body=Check out this article: https://pages.carm.cc/doc/branch-main.html"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/doc/branch-main.html&name=为什么Git分支开始从“master”变为“main”了？&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/doc/branch-main.html&t=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E6%BA%90-%E2%80%9CBlack-Lives-Matter%E2%80%9D"><span class="toc-number">2.</span> <span class="toc-text">起源 - “Black Lives Matter”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%8C%E5%8A%A8"><span class="toc-number">3.</span> <span class="toc-text">行动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Una-Kravets"><span class="toc-number">3.0.1.</span> <span class="toc-text">@Una Kravets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nat-Friedman"><span class="toc-number">3.0.2.</span> <span class="toc-text">@Nat Friedman</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E4%B8%8E"><span class="toc-number">4.</span> <span class="toc-text">参与</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E4%BF%AE%E6%94%B9%E5%88%86%E6%94%AF"><span class="toc-number">4.1.</span> <span class="toc-text">本地修改分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-GitHub-%E4%B8%8A%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%88%86%E6%94%AF"><span class="toc-number">4.2.</span> <span class="toc-text">在 GitHub 上修改默认分支</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        为什么Git分支开始从“master”变为“main”了？
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">CarmJos</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-11-02T05:32:02.000Z" itemprop="datePublished">2021-11-02</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/doc/">doc</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Cultural/" rel="tag">Cultural</a>, <a class="tag-link-link" href="/tags/Git/" rel="tag">Git</a>, <a class="tag-link-link" href="/tags/dev/" rel="tag">dev</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="发现">发现</h2>
+<p>一开始接触 Git 的时候，默认的分支名都为 <code>master</code> ，包括后续使用的时候也习惯于输入<code>master</code>进行各类操作。</p>
+<p>而我最近发现，<a target="_blank" rel="noopener" href="https://github.com">Github</a> 与 <a target="_blank" rel="noopener" href="https://about.gitlab.com/">Gitlab</a> 都开始使用 <code>main</code> 取代原先的 <code>master</code><br>
+作为项目的默认主分支了，这是为什么呢？</p>
+<h2 id="起源-“Black-Lives-Matter”">起源 - “Black Lives Matter”</h2>
+<p>自2020年六月起，由于“Black Lives Matter”抗议活动持续发酵，而计算机行业中对<code>master</code>与<code>slave</code>这两个词的使用引起了部分人的反感。</p>
+<p>在抗议声起、社会动荡加剧之时，更多的人认为这些包含历史文化因素的词汇已经过时，且应当被替换，于是多个开源项目开始采取行动替换冒犯性的术语，其中包括 PHPUnit 和 Curl、OpenZFS 等。</p>
+<p>不仅仅是<code>master</code>与<code>slave</code>,还有许多相关的词汇如<code>whitelist</code>与<code>blacklist</code>都被计划更改为<code>allowList</code>与<code>denyList</code>。</p>
+<p>正如 <a target="_blank" rel="noopener" href="https://www.zdnet.com/article/github-to-replace-master-with-main-starting-next-month/">ZDNet</a> 所说，继续使用这些带有种族色彩的词汇可能会延长种族歧视。一些学者在 2018 年的期刊上写道，“这些术语不仅反映了种族主义文化，而且还强化、合法化和延续了它。”</p>
+<p>而 LinkedIn 的软件工程师 Gabriel Csapo 也在 Twitter 上表示，他也正在提出更新 Microsoft 内部库的请求，并删除任何带有种族歧视色彩的短语。</p>
+<h2 id="行动">行动</h2>
+<p>在此背景下，一位Twitter网友的提议，而这一提议得到了GitHub CEO的支持。<br>
+<img src="/images/branch-main/una_kravets.png" alt="Twitter"></p>
+<blockquote>
+<h4 id="Una-Kravets">@Una Kravets</h4>
+<p>我很高兴将 GitHub 的默认分支结构从『master』改成『main』，我希望我们能和 @GitHub 一起以社区为单位来做这件事……</p>
+<h4 id="Nat-Friedman">@Nat Friedman</h4>
+<p>这是个好主意！ 我们正在朝这方面进行改进了！</p>
+</blockquote>
+<p>于是自 2020年10月1日 开始，Github上所有的新库便都开始以 <code>main</code> 命名，并开始逐渐的将原先<code>master</code>为主分支的库修改为以<code>main</code>为主分支。</p>
+<p>鉴于GitHub有4000多万用户、1亿多个存储库以及至少2800万个公共存储库，这是项艰巨的任务。 任何一个规划的失误都会导致Linux内核之类的项目代码无法访问。全球大批企业依赖Linux内核，一旦发生这类事件都可能引发灾难性的后果。</p>
+<p>于是，GitHub又做了以下更改以确保万无一失：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.blog/changelog/2020-07-17-links-to-deleted-branches-now-redirect-to-the-default-branch/">更新了 GitHub.com</a> 以直接重定向<code>master</code>分支到新的默认分支！</li>
+<li><a target="_blank" rel="noopener" href="https://github.blog/changelog/2020-07-31-build-and-deploy-github-pages-from-any-branch-beta/">更新了 Github Pages</a> 以支持从任一分支进行部署</li>
+<li><a target="_blank" rel="noopener" href="https://github.blog/changelog/2020-08-26-set-the-default-branch-for-newly-created-repositories/">添加了用户、组织与企业设定</a> 以设定默认的分支名与新项目的默认分支名。
+<ul>
+<li>需要注意的是，这些设定同时在 <a target="_blank" rel="noopener" href="https://github.com/new">GitHub.com</a> 与 <a target="_blank" rel="noopener" href="https://developer.github.com/v3/guides/getting-started/#create-a-repository">GitHub API</a> 生效。</li>
+<li><a target="_blank" rel="noopener" href="https://github.blog/2020-07-27-highlights-from-git-2-28/#introducing-init-defaultbranch">Git 2.28</a> 也添加了一个类似的设定 <code>init.defaultBranch</code>。</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/github/renaming#rename-existing">我们让重命名已有分支更加方便快捷了</a></li>
+</ul>
+<h2 id="参与">参与</h2>
+<p>如果还是习惯于使用 <code>master</code> 分支，那么大可不用更改继续使用下去。</p>
+<p>若想要支持相关的行动，则可以跟随以下的操作将<code>master</code>分支无损迁移到<code>main</code>分支。</p>
+<h3 id="本地修改分支">本地修改分支</h3>
+<ol>
+<li>首先将<code>master</code>分支移到<code>main</code>分支下</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -m master main</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>随后将新命名的分支<code>main</code>推送到远程库中</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin main</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>再将HEAD指向<code>main</code>分支</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>最后删除远程库中旧的<code>master</code>分支即可</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin --delete master</span><br></pre></td></tr></table></figure>
+<h3 id="在-GitHub-上修改默认分支">在 GitHub 上修改默认分支</h3>
+<p>用户、组织和企业可以在以下地址修改默认分支名。</p>
+<ul>
+<li>用户 <code>https://github.com/settings/repositories</code></li>
+<li>组织所有者 <code>https://github.com/organizations/&lt;组织名&gt;/settings/repository-defaults</code></li>
+<li>企业管理员 <code>https://github.com/enterprises/&lt;企业名&gt;/settings/member_privileges</code></li>
+</ul>
+<p><img src="/images/branch-main/settings.png" alt="Settings"></p>
+<h2 id="参考文献">参考文献</h2>
+<ul>
+<li>&lt; <a target="_blank" rel="noopener" href="https://github.com/github/renaming">Github Renaming</a> &gt;</li>
+<li>&lt; <a target="_blank" rel="noopener" href="https://www.zdnet.com/article/github-to-replace-master-with-main-starting-next-month/">GitHub to replace ‘master’ with ‘main’ starting next month</a> &gt;</li>
+<li>&lt; <a target="_blank" rel="noopener" href="https://www.theserverside.com/feature/Why-GitHub-renamed-its-master-branch-to-main">Why GitHub renamed its master branch to main</a> &gt;</li>
+</ul>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li>
+         
+          <li><a href="/friends/">好友们</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E6%BA%90-%E2%80%9CBlack-Lives-Matter%E2%80%9D"><span class="toc-number">2.</span> <span class="toc-text">起源 - “Black Lives Matter”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%8C%E5%8A%A8"><span class="toc-number">3.</span> <span class="toc-text">行动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Una-Kravets"><span class="toc-number">3.0.1.</span> <span class="toc-text">@Una Kravets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nat-Friedman"><span class="toc-number">3.0.2.</span> <span class="toc-text">@Nat Friedman</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E4%B8%8E"><span class="toc-number">4.</span> <span class="toc-text">参与</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E4%BF%AE%E6%94%B9%E5%88%86%E6%94%AF"><span class="toc-number">4.1.</span> <span class="toc-text">本地修改分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8-GitHub-%E4%B8%8A%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%88%86%E6%94%AF"><span class="toc-number">4.2.</span> <span class="toc-text">在 GitHub 上修改默认分支</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">5.</span> <span class="toc-text">参考文献</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/doc/branch-main.html"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/doc/branch-main.html&text=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/doc/branch-main.html&is_video=false&description=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=为什么Git分支开始从“master”变为“main”了？&body=Check out this article: https://pages.carm.cc/doc/branch-main.html"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/doc/branch-main.html&title=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/doc/branch-main.html&name=为什么Git分支开始从“master”变为“main”了？&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/doc/branch-main.html&t=为什么Git分支开始从“master”变为“main”了？"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2023
+    CarmJos
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6T85H5QT8K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6T85H5QT8K');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'CarmJos/CarmJos';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Pages Comment';
+      var utterances_theme = 'github-light';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>

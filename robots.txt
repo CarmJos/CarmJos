@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /lib
+Disallow: /css
+Disallow: /images
+Disallow: /js
+
+Sitemap: https://pages.carm.cc/sitemap.xml

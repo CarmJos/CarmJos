@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="有朋友和我说 “一个自动领奖插件就快400kb，是不是太臃肿了？”。 我觉得针对这种问题应当统一作出解释。 关于用户体验 这其实是一种个人代码风格的选择，不同开发者的风格也大多不相同。在很早的时候，我和这位朋友一样，对于一个明明功能很简单的插件打包了许多类库这种事情感到十分可笑。但随着我接的各种小单子越来越多，接触的用户越来越多，我发现程序员思维在这里似乎并不适用。 其实这种问题只要做一个核心类库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为何我的部分轻量插件的体积十分“庞大”？">
+<meta property="og:url" content="https://pages.carm.cc/dev/why-plugins-huge.html">
+<meta property="og:site_name" content="Carm&#39;s Pages">
+<meta property="og:description" content="有朋友和我说 “一个自动领奖插件就快400kb，是不是太臃肿了？”。 我觉得针对这种问题应当统一作出解释。 关于用户体验 这其实是一种个人代码风格的选择，不同开发者的风格也大多不相同。在很早的时候，我和这位朋友一样，对于一个明明功能很简单的插件打包了许多类库这种事情感到十分可笑。但随着我接的各种小单子越来越多，接触的用户越来越多，我发现程序员思维在这里似乎并不适用。 其实这种问题只要做一个核心类库">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-02T18:32:02.000Z">
+<meta property="article:modified_time" content="2023-12-28T11:36:35.392Z">
+<meta property="article:author" content="CarmJos">
+<meta property="article:tag" content="dev">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>为何我的部分轻量插件的体积十分“庞大”？</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="Carm&#39;s Pages" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/doc/c-name-rules.html"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/doc/javadoc-in-github.html"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/dev/why-plugins-huge.html"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/dev/why-plugins-huge.html&text=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/dev/why-plugins-huge.html&is_video=false&description=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=为何我的部分轻量插件的体积十分“庞大”？&body=Check out this article: https://pages.carm.cc/dev/why-plugins-huge.html"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/dev/why-plugins-huge.html&name=为何我的部分轻量插件的体积十分“庞大”？&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/dev/why-plugins-huge.html&t=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C"><span class="toc-number">1.</span> <span class="toc-text">关于用户体验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E9%AB%98%E7%89%88%E6%9C%AC%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">关于高版本接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        为何我的部分轻量插件的体积十分“庞大”？
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">CarmJos</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-03-02T18:32:02.000Z" itemprop="datePublished">2022-03-03</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/dev/">开发经验分享</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/dev/" rel="tag">dev</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>有朋友和我说 “一个<a target="_blank" rel="noopener" href="https://github.com/CarmJos/TimeReward">自动领奖插件</a>就快400kb，是不是太臃肿了？”。 我觉得针对这种问题应当统一作出解释。</p>
+<h2 id="关于用户体验">关于用户体验</h2>
+<p>这其实是一种个人代码风格的选择，不同开发者的风格也大多不相同。在很早的时候，我和这位朋友一样，对于一个明明功能很简单的插件打包了许多类库这种事情感到十分可笑。但随着我接的各种小单子越来越多，接触的用户越来越多，我发现程序员思维在这里似乎并不适用。</p>
+<p>其实这种问题只要做一个核心类库插件就全部解决了。但作为用户来说，相比于要额外安装一个依赖插件，我更喜欢开箱即用的感觉，而非安装一个插件需要额外安装许许多多杂七杂八的类库。举个例子，如果我想使用一个插件，需要额外安装作者的一个类库；如果要使用的插件来自于多个作者，岂不是需要额外安装许许多多的类库？</p>
+<p>因此，作为一个插件覆盖面并不广泛的开发者，我选择每个插件都单独打包类库，而让用户无需对此焦虑。</p>
+<h2 id="关于高版本接口">关于高版本接口</h2>
+<p>这时候又有人想问“为何不使用高版本提供的依赖接口，直接让服务端下载依赖使用，从而减小插件的大小呢？”</p>
+<p>其实理由已经出现在问题里了。没错，这个功能需要“<strong>高版本</strong>”。</p>
+<p>相比于为了减小插件体积而使用这个功能，以导致只有高版本才可以使用，我更倾向于让一个插件能够覆盖到更多的版本，从而减少用户的选择成本。</p>
+<p>让我们回到用户的视角，面对一个功能需求上很适合自己的插件，却因为版本过低而无法使用，而这的原因仅仅是开发者为了让插件看上去更“轻量化”去使用高版本的依赖接口从而失去了低版本用户的支持，我相信，这个时候用户更希望的是在自己的服务器也能用上这款插件，而不是我们需要的“轻量化”。</p>
+<h2 id="总结">总结</h2>
+<p>总而言之，是否打包类库到插件纯属开发者的个人习惯。有的人喜欢“轻量”而自行挑选重要内容放到自己的插件中，有的人更爱“便捷”而一股脑全塞上，也有的人会为了“用户体验”而做出一点大小上的牺牲。</p>
+<p>如果是三年前的我，我会强烈推荐你做一个“依赖库插件”，它能够很好的解决插件实际功能和大小不等的问题同时还能让这个插件在不同的服务器版本中得到支持；<br>
+但如果是现在的我，我会推荐你好好考虑，对于单个功能插件，在必要的情况下直接打包依赖库也完全没问题的：虽然需要在“轻量化”上做出一些牺牲，但可以让使用的用户得到更好的体验，在我看来这是一个更好的决定。</p>
+<hr>
+<p>文章作者为 @CarmJos ，同时感谢 @nelson 帮助校对文章。</p>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li>
+         
+          <li><a href="/friends/">好友们</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C"><span class="toc-number">1.</span> <span class="toc-text">关于用户体验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E9%AB%98%E7%89%88%E6%9C%AC%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">关于高版本接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://pages.carm.cc/dev/why-plugins-huge.html"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://pages.carm.cc/dev/why-plugins-huge.html&text=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://pages.carm.cc/dev/why-plugins-huge.html&is_video=false&description=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=为何我的部分轻量插件的体积十分“庞大”？&body=Check out this article: https://pages.carm.cc/dev/why-plugins-huge.html"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://pages.carm.cc/dev/why-plugins-huge.html&title=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://pages.carm.cc/dev/why-plugins-huge.html&name=为何我的部分轻量插件的体积十分“庞大”？&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://pages.carm.cc/dev/why-plugins-huge.html&t=为何我的部分轻量插件的体积十分“庞大”？"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2017-2023
+    CarmJos
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/CarmJos?tab=repositories">项目</a></li><!--
+     --><!--
+       --><li><a href="/friends/">好友们</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6T85H5QT8K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-6T85H5QT8K');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'CarmJos/CarmJos';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Pages Comment';
+      var utterances_theme = 'github-light';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>
