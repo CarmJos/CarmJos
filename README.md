@@ -7,11 +7,12 @@ Java软件开发工程师，从业七年，现居南京。爱好人文、花卉�
 
 ### 相关领域
 
-- 🎥 用户界面设计
-- 📐 3D零件建模与打印
-- ⌨️ Java后端开发与架构设计
-- 💿 MySQL、MongoDB数据架构设计
-- 💻 Linux/Windows系统运维<img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
+- ⌨️ 后端软件开发与统一架构设计
+- 🤖 嵌入式软件开发
+- 💿 数据库设计与管理
+- 🎥 UX/UI 基本设计
+- 📐 工程设计与实物建模/3D打印
+- 💻 服务器软硬件运维管理<img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
 
 ### 联系方式
 - 📧 商务相关请发往邮箱 **carm@carm.cc** 。
