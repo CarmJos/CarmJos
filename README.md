@@ -1,18 +1,12 @@
 ## 你好！我是 **Carm** 。
 <img align="right" src="https://github-readme-stats-fast.vercel.app/api?username=CarmJos&include_all_commits=true&show_icons=true&locale=cn&count_private=true&disable_animations=true&shide_title=false&icon_color=8b658b&ring_color=8b658b&theme=dark" />
 
-Java软件开发工程师，从业七年，现居南京。爱好人文、花卉、人像摄影与人声母带录制。
+<span class="text-2xl text-neutral-900">“**热爱生活中的点滴美好，追寻万物中的无尽创造。**”</span>
 
-欢迎访问我的文章站 [Carm's Pages](https://pages.carm.cc) ,不定期更新。
+我正痴迷于**软硬件开发**，亦是一名**开源软件贡献者**——只为在一行行代码中，安放心中对创造的执念。
+我始终笃信，科技绝不是冰冷的符号与程序，其真正的意义，在于俯身服务每一位寻常用户，亦或是为素末谋面的创造者节省片刻时间。
 
-### 相关领域
-
-- ⌨️ 后端软件开发与统一架构设计
-- 🤖 嵌入式软件开发
-- 💿 数据库设计与管理
-- 🎥 UX/UI 基本设计
-- 📐 工程设计与实物建模/3D打印
-- 💻 服务器软硬件运维管理<img align="right" height=45% width=45% src="https://github.com/CarmJos/CarmJos/blob/main/img/minecraft/3d-render/rd-2.png" />
+欢迎访问我的个人网站 [Carm's Home](https://www.carm.cc)，文章、视频不定期更新。
 
 ### 联系方式
 - 📧 商务相关请发往邮箱 **carm@carm.cc** 。
