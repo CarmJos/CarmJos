@@ -1,7 +1,9 @@
 name: 友链申请
 description: 申请添加友链到我的个人网站
-title: "feat(social): 添加友链 [个人名称] "
-labels: ["friend-link"]
+title: "feat(social): 添加友链"
+labels: ["友链申请"]
+assignees:
+  - carmjos
 body:
   - type: markdown
     attributes:
@@ -41,8 +43,8 @@ body:
   - type: input
     id: name
     attributes:
-      label: 名字
-      description: 你的显示名称
+      label: 名字 (ID)
+      description: 您的显示名称 (一般为英文名)
       placeholder: "CarmJos"
     validations:
       required: true
@@ -51,7 +53,7 @@ body:
     id: nickname
     attributes:
       label: 昵称
-      description: 可选，你的昵称
+      description: 可选，您的昵称（一般为中文）
       placeholder: "卡姆"
     validations:
       required: false
@@ -60,7 +62,7 @@ body:
     id: avatar
     attributes:
       label: 头像链接
-      description: "可选，默认为 GitHub 头像 (https://github.com/<ID>.png)"
+      description: "可选，默认采用 GitHub 头像 (`https://github.com/<ID>.png`)"
       placeholder: "https://github.com/CarmJos.png"
     validations:
       required: false
