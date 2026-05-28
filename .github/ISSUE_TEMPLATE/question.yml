@@ -1,4 +1,4 @@
-name: 提问
+name: 答疑解惑
 description: 向我提问，涵盖软件开发、硬件设计、摄影摄像、情感交流等方向。
 title: "【提问】{title}"
 labels: ["问答"]
