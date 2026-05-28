@@ -7,13 +7,42 @@ body:
     attributes:
       value: |
         ## 友链申请
-        感谢您申请添加友链！请填写以下信息。
+
+        感谢您跟我交换友链！您可以填写此模板以提交您的信息，同时我的友链信息如下所示：
+
+        ```yaml
+        CarmJos:
+          name: CarmJos
+          nickname: 卡姆
+          avatar:
+            url: https://github.com/CarmJos.png
+          description: 热爱生活中的点滴美好，追寻万物中的无尽创造。
+          links:
+            - icon: fab fa-github
+              url: https://github.com/CarmJos
+              label: GitHub
+            - icon: fas fa-blog
+              url: https://www.carm.cc/
+              label: Blog
+        ```
+
+        如果您希望互为友链，至少需要满足以下要求：
+        - 您与我在线上 / 线下相识，并在至少一个社交平台互为好友；
+        - 您的博客或网站正在正常运行，并且在可预见的未来也将继续运行下去；
+        - 您的博客或网站必须使用 SSL/TLS 加密，并最好开启了 HSTS。
+
+        请填写以下信息，提交后我会自动回复您格式化的友链数据。
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 基本信息
 
   - type: input
     id: name
     attributes:
-      label: ID
-      description: 您的英文ID
+      label: 名字
+      description: 你的显示名称
       placeholder: "CarmJos"
     validations:
       required: true
@@ -22,7 +51,7 @@ body:
     id: nickname
     attributes:
       label: 昵称
-      description: 可选，您的中文昵称
+      description: 可选，你的昵称
       placeholder: "卡姆"
     validations:
       required: false
@@ -50,6 +79,7 @@ body:
     attributes:
       value: |
         ## 链接信息
+
         请填写至少一个链接，每个链接需要包含 URL 和 Label。
         Icon 可从 [Font Awesome](https://fontawesome.com/) 自选免费内容，默认为 `fas fa-blog`。
 
