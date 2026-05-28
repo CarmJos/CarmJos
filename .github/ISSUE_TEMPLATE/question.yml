@@ -1,0 +1,55 @@
+name: 提问
+description: 向我提问，涵盖软件开发、硬件设计、摄影摄像、情感交流等方向。
+title: "【提问】{title}"
+labels: ["问答"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 感谢您的提问！
+        请认真填写以下内容，以便我更好地理解和回答您的问题。
+
+        > **⚠️ 请在提交前将标题中的 `{title}` 替换为您的问题概述！**
+        > 标题格式示例：`【提问】如何入门嵌入式开发？`
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 问题分类
+      description: 请选择您的问题所属类别。
+      options:
+        - 软件开发
+        - 硬件设计
+        - 摄影摄像
+        - 情感交流
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 问题详情
+      description: 请详细描述您的问题。
+      placeholder: 请清晰地描述您想要了解的内容、遇到的问题或困惑...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 补充内容
+      description: 任何您认为有助于理解问题的背景信息、上下文或已尝试的方案。
+      placeholder: 例如：我已经尝试过...、我的环境是...、相关链接...
+    validations:
+      required: false
+
+  - type: textarea
+    id: attachments
+    attributes:
+      label: 相关文件
+      description: |
+        如有需要，请上传相关文件（截图、代码、文档等）。
+        您可以直接将文件拖拽到此处。
+    validations:
+      required: false
