@@ -85,6 +85,8 @@ body:
         请填写至少一个链接，每个链接需要包含 URL 和 Label。
         Icon 可从 [Font Awesome](https://fontawesome.com/) 自选免费内容，默认为 `fas fa-blog`。
 
+        ### 第一个链接（必填）
+
   - type: input
     id: link1_url
     attributes:
@@ -97,8 +99,7 @@ body:
   - type: input
     id: link1_label
     attributes:
-      label: "链接1 - Label"
-      description: 链接显示名称
+      label: "链接1 - 显示名称"
       placeholder: "GitHub"
     validations:
       required: true
@@ -106,17 +107,21 @@ body:
   - type: input
     id: link1_icon
     attributes:
-      label: "链接1 - Icon"
+      label: "链接1 - 图标"
       description: "Font Awesome 图标类名，默认为 fas fa-blog"
       placeholder: "fab fa-github"
     validations:
       required: false
 
+  - type: markdown
+    attributes:
+      value: |
+        ### 第二个链接（可选）
+
   - type: input
     id: link2_url
     attributes:
-      label: "链接2 - URL"
-      description: 链接地址（可选）
+      label: "链接2 - 链接地址"
       placeholder: "https://www.carm.cc/"
     validations:
       required: false
@@ -124,8 +129,7 @@ body:
   - type: input
     id: link2_label
     attributes:
-      label: "链接2 - Label"
-      description: 链接显示名称
+      label: "链接2 - 显示名称"
       placeholder: "Blog"
     validations:
       required: false
@@ -133,36 +137,39 @@ body:
   - type: input
     id: link2_icon
     attributes:
-      label: "链接2 - Icon"
+      label: "链接2 - 图标"
       description: "Font Awesome 图标类名，默认为 fas fa-blog"
       placeholder: "fas fa-blog"
     validations:
       required: false
+      
+  - type: markdown
+    attributes:
+      value: |
+        ### 第三个链接（可选）
 
   - type: input
     id: link3_url
     attributes:
-      label: "链接3 - URL"
-      description: 链接地址（可选）
-      placeholder: "https://space.bilibili.com/123456"
+      label: "链接2 - 链接地址"
+      placeholder: "https://www.carm.cc/"
     validations:
       required: false
 
   - type: input
     id: link3_label
     attributes:
-      label: "链接3 - Label"
-      description: 链接显示名称
-      placeholder: "BiliBili"
+      label: "链接3 - 显示名称"
+      placeholder: "Blog"
     validations:
       required: false
 
   - type: input
     id: link3_icon
     attributes:
-      label: "链接3 - Icon"
+      label: "链接3 - 图标"
       description: "Font Awesome 图标类名，默认为 fas fa-blog"
-      placeholder: "fa-brands fa-bilibili"
+      placeholder: "fas fa-blog"
     validations:
       required: false
 
